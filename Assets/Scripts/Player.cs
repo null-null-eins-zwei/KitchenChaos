@@ -40,6 +40,17 @@ namespace ZZOT.KitchenChaos
 
 
             transform.position += move;
+
+            float rotateSpeed = 10f;
+            Vector3 lookAt = Vector3.Slerp(
+                                transform.forward, 
+                                move,
+                                Time.deltaTime * rotateSpeed);
+
+            //transform.LookAt();
+            transform.forward = lookAt;
+
+            Debug.Log(Time.deltaTime);
         }
     }
 }
