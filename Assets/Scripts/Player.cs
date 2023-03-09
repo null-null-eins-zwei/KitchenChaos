@@ -49,8 +49,6 @@ namespace ZZOT.KitchenChaos
 
             //transform.LookAt();
             transform.forward = lookAt;
-
-            Debug.Log(Time.deltaTime);
         }
     }
 }
