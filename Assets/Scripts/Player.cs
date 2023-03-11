@@ -1,15 +1,16 @@
 using UnityEngine;
 
-namespace ZZOT.KitchenChaos
+namespace ZZOT.KitchenChaos.Player
 {
     public class Player : MonoBehaviour
     {
-        [SerializeField] private float playesSpeed = 7f;
+        [SerializeField] private float _playesSpeed = 7f;
+        private bool _isWalking = false;
 
         // Update is called once per frame
         private void Update()
         {
-            Vector2 input = new();
+            Vector2 input = Vector2.zero;
 
             if (Input.GetKey(KeyCode.W))
             {
@@ -31,7 +32,7 @@ namespace ZZOT.KitchenChaos
                 input += Vector2.right; // x+1
             }
 
-            input = playesSpeed * Time.deltaTime * input.normalized;
+            input = _playesSpeed * Time.deltaTime * input.normalized;
 
             Vector3 move = new(
                             x: input.x,
@@ -39,16 +40,20 @@ namespace ZZOT.KitchenChaos
                             z: input.y);
 
 
+            _isWalking = move != Vector3.zero;
+
             transform.position += move;
 
             float rotateSpeed = 10f;
             Vector3 lookAt = Vector3.Slerp(
-                                transform.forward, 
+                                transform.forward,
                                 move,
                                 Time.deltaTime * rotateSpeed);
 
             //transform.LookAt();
             transform.forward = lookAt;
         }
+
+        public bool IsWalking => _isWalking;
     }
 }
