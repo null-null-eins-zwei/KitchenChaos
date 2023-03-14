@@ -16,7 +16,7 @@ namespace ZZOT.KitchenChaos.UserInputSystem
         {
             Vector2 input = _userInputActions.Player.Move.ReadValue<Vector2>();
 
-            // we need normalize because of diagonal cases,
+            // we need to normalize because of diagonal cases,
             return input.normalized;
         }
     }
