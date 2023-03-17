@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace ZZOT.KitchenChaos
+namespace ZZOT.KitchenChaos.Furniture
 {
     public class ClearCounter : MonoBehaviour
     {

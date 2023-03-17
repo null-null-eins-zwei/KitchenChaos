@@ -1,18 +1,29 @@
 using System;
 using UnityEngine;
+using ZZOT.KitchenChaos.Furniture;
 using ZZOT.KitchenChaos.UserInputSystem;
 
 namespace ZZOT.KitchenChaos.Player
 {
     public class Player : MonoBehaviour
     {
+        public static Player Instance { get; private set; }
+
+        public event EventHandler<OnSelectedConterChangedEventArgs> OnSelectedConterChanged;
+        public class OnSelectedConterChangedEventArgs : EventArgs
+        {
+            public ClearCounter selectedCounter;
+        }
+
         [SerializeField] private float _playerSpeed = 7f;
         [SerializeField] private UserInput _input;
         [SerializeField] private LayerMask _countersLayerMask;
 
         private readonly float _rotateSpeed = 10f;
+
         private bool _isWalking = false;
         private Vector3 _lastInteractDirection;
+        private ClearCounter _selectedCounter;
 
         private const float _playerSize = 0.5f;
         private const float _playerHeight = 2f;
@@ -23,35 +34,21 @@ namespace ZZOT.KitchenChaos.Player
             _input.OnInteractAction += input_OnInteractAction;
         }
 
-        private void input_OnInteractAction(object sender, EventArgs e)
+        private void Awake()
         {
-            Vector2 input = _input.GetMovementVectorNormalized();
-
-            Vector3 moveDir = new(
-                            x: input.x,
-                            y: 0f,
-                            z: input.y);
-
-            if (moveDir != Vector3.zero)
+            if (Instance != null)
             {
-                _lastInteractDirection = moveDir;
+                Debug.LogError($"Player is not a Singleton: {this}.");
             }
 
+            Instance = this;
+        }
 
-            var hit = Physics.Raycast(
-                        origin: transform.position,
-                        direction: _lastInteractDirection,
-                        out var raycastHit,
-                        maxDistance: _interactDistance,
-                        layerMask: _countersLayerMask);
-
-            if (hit)
+        private void input_OnInteractAction(object sender, EventArgs e)
+        {
+            if (_selectedCounter != null)
             {
-                var isClearCounter = raycastHit.transform.TryGetComponent(out ClearCounter counter);
-                if (isClearCounter)
-                {
-                    counter.Interact();
-                }
+                _selectedCounter.Interact();
             }
         }
 
@@ -59,6 +56,7 @@ namespace ZZOT.KitchenChaos.Player
         private void Update()
         {
             HandleMovement();
+            HandleInteraction();
         }
 
         public bool IsWalking => _isWalking;
@@ -116,6 +114,49 @@ namespace ZZOT.KitchenChaos.Player
             transform.forward = lookAt;
         }
 
+        private void HandleInteraction()
+        {
+            Vector2 input = _input.GetMovementVectorNormalized();
+
+            Vector3 moveDir = new(
+                            x: input.x,
+                            y: 0f,
+                            z: input.y);
+
+            if (moveDir != Vector3.zero)
+            {
+                _lastInteractDirection = moveDir;
+            }
+
+
+            var hit = Physics.Raycast(
+                        origin: transform.position,
+                        direction: _lastInteractDirection,
+                        out var raycastHit,
+                        maxDistance: _interactDistance,
+                        layerMask: _countersLayerMask);
+
+            if (hit)
+            {
+                var isClearCounter = raycastHit.transform.TryGetComponent(out ClearCounter counter);
+                if (isClearCounter)
+                {
+                    if (counter != _selectedCounter)
+                    {
+                        SetSelectedCounter(counter);
+                    }
+                }
+                else
+                {
+                    SetSelectedCounter(null);
+                }
+            }
+            else
+            {
+                SetSelectedCounter(null);
+            }
+        }
+
         private bool CanMove(Vector3 moveDir, float moveDistance)
         {
             var hit = Physics.CapsuleCast(
@@ -126,6 +167,17 @@ namespace ZZOT.KitchenChaos.Player
                         maxDistance: moveDistance);
 
             return !hit;
+        }
+
+        private void SetSelectedCounter(ClearCounter selected)
+        {
+            _selectedCounter = selected;
+            OnSelectedConterChanged?.Invoke(
+                this,
+                new OnSelectedConterChangedEventArgs
+                {
+                    selectedCounter = selected,
+                });
         }
     }
 }
