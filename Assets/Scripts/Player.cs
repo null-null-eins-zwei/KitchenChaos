@@ -18,17 +18,12 @@ namespace ZZOT.KitchenChaos.Player
         private const float _playerHeight = 2f;
         private const float _interactDistance = 2f;
 
-
-        // Update is called once per frame
-        private void Update()
+        private void Start()
         {
-            HandleMovement();
-            HandleInteractions();
+            _input.OnInteractAction += input_OnInteractAction;
         }
 
-        public bool IsWalking => _isWalking;
-
-        private void HandleInteractions()
+        private void input_OnInteractAction(object sender, EventArgs e)
         {
             Vector2 input = _input.GetMovementVectorNormalized();
 
@@ -37,7 +32,7 @@ namespace ZZOT.KitchenChaos.Player
                             y: 0f,
                             z: input.y);
 
-            if(moveDir !=  Vector3.zero )
+            if (moveDir != Vector3.zero)
             {
                 _lastInteractDirection = moveDir;
             }
@@ -59,6 +54,14 @@ namespace ZZOT.KitchenChaos.Player
                 }
             }
         }
+
+        // Update is called once per frame
+        private void Update()
+        {
+            HandleMovement();
+        }
+
+        public bool IsWalking => _isWalking;
 
         private void HandleMovement()
         {
