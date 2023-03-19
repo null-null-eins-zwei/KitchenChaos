@@ -870,6 +870,18 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 72f8a8597a580e745a843df4875b564d, type: 3}
+--- !u!114 &1674824140 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5964652181993212998, guid: 72f8a8597a580e745a843df4875b564d,
+    type: 3}
+  m_PrefabInstance: {fileID: 1674824139}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f878804d473c39445b8054139db253c6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1790770802
 GameObject:
   m_ObjectHideFlags: 0
@@ -1092,10 +1104,20 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5964652181993212998, guid: 72f8a8597a580e745a843df4875b564d,
         type: 3}
+      propertyPath: _testing
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5964652181993212998, guid: 72f8a8597a580e745a843df4875b564d,
+        type: 3}
       propertyPath: _kitchenObjectSO
       value: 
       objectReference: {fileID: 11400000, guid: c4cdef45192a9f8429a65aefd341f0ae,
         type: 2}
+    - target: {fileID: 5964652181993212998, guid: 72f8a8597a580e745a843df4875b564d,
+        type: 3}
+      propertyPath: _secontClearCounter
+      value: 
+      objectReference: {fileID: 1674824140}
     - target: {fileID: 7911251849312105111, guid: 72f8a8597a580e745a843df4875b564d,
         type: 3}
       propertyPath: m_Name
