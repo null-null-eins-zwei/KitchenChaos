@@ -1,4 +1,5 @@
 using UnityEngine;
+using ZZOT.KitchenChaos.User;
 
 namespace ZZOT.KitchenChaos.Furniture
 {
@@ -12,10 +13,10 @@ namespace ZZOT.KitchenChaos.Furniture
         void Start()
         {
             // Can't do this on Awake() because it is possible that this will be awaken earlier then Player 
-            User.Player.Instance.OnSelectedConterChanged += Player_OnSelectedConterChanged;
+            Player.Instance.OnSelectedConterChanged += Player_OnSelectedConterChanged;
         }
 
-        private void Player_OnSelectedConterChanged(object sender, User.Player.OnSelectedConterChangedEventArgs e)
+        private void Player_OnSelectedConterChanged(object sender, Player.OnSelectedConterChangedEventArgs e)
         {
             if(e.selectedCounter == _clearCounter)
             {
