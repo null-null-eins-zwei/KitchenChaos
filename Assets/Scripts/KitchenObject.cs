@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using ZZOT.KitchenChaos.Furniture;
+using ZZOT.KitchenChaos.Interfaces;
 using ZZOT.KitchenChaos.Scriptable;
 
 namespace ZZOT.KitchenChaos
@@ -10,27 +11,27 @@ namespace ZZOT.KitchenChaos
     {
         [SerializeField] private KitchenObjectSO _kitchenObjectSo;
 
-        private ClearCounter _clearCounter;
+        private IKitchenObjectParent _kitchenObjectParent;
 
-        public KitchenObjectSO ScriptableObject => _kitchenObjectSo;
+        public KitchenObjectSO GetKitchenObjectSo => _kitchenObjectSo;
 
-        public ClearCounter GetClearCounter => _clearCounter;
+        public IKitchenObjectParent GetKitchenObjectParent => _kitchenObjectParent;
 
-        public void SetClearCounter(ClearCounter newCounter) {
-            if(_clearCounter != null)
+        public void SetKitchenObjectParent(IKitchenObjectParent newParent) {
+            if(_kitchenObjectParent != null)
             {
-                _clearCounter.ClearKitchenObject();
+                _kitchenObjectParent.ClearKitchenObject();
             }
 
-            if (newCounter.HasKitchenObject())
+            if (newParent.HasKitchenObject())
             {
-                Debug.LogError($"ClearCounter {newCounter} already has an KitchenObject.");
+                Debug.LogError($"{nameof(IKitchenObjectParent)} {newParent} already has an KitchenObject.");
             }
 
-            _clearCounter = newCounter;
-            _clearCounter.SetKitchenObject(this);
+            _kitchenObjectParent = newParent;
+            _kitchenObjectParent.SetKitchenObject(this);
 
-            transform.parent = _clearCounter.GetKitchenObjectFollowTransform();
+            transform.parent = _kitchenObjectParent.GetKitchenObjectFollowTransform();
             transform.localPosition = Vector3.zero;
         }
     }

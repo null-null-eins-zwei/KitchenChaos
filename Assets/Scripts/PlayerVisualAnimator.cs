@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ZZOT.KitchenChaos.Player
+namespace ZZOT.KitchenChaos.User
 {
     public class PlayerVisualAnimator : MonoBehaviour
     {

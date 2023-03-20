@@ -1,15 +1,21 @@
 using System;
 using UnityEngine;
 using ZZOT.KitchenChaos.Furniture;
+using ZZOT.KitchenChaos.Interfaces;
 using ZZOT.KitchenChaos.UserInputSystem;
 
-namespace ZZOT.KitchenChaos.Player
+namespace ZZOT.KitchenChaos.User
 {
-    public class Player : MonoBehaviour
+    public class Player : MonoBehaviour, IKitchenObjectParent
     {
         public static Player Instance { get; private set; }
 
+        [SerializeField] private Transform _objectHandlePoint;
+
+        private KitchenObject _kitchenObject;
+
         public event EventHandler<OnSelectedConterChangedEventArgs> OnSelectedConterChanged;
+
         public class OnSelectedConterChangedEventArgs : EventArgs
         {
             public ClearCounter selectedCounter;
@@ -48,7 +54,7 @@ namespace ZZOT.KitchenChaos.Player
         {
             if (_selectedCounter != null)
             {
-                _selectedCounter.Interact();
+                _selectedCounter.Interact(this);
             }
         }
 
@@ -178,6 +184,19 @@ namespace ZZOT.KitchenChaos.Player
                 {
                     selectedCounter = selected,
                 });
+        }
+
+        public Transform GetKitchenObjectFollowTransform() => _objectHandlePoint;
+
+        public KitchenObject GetKitchenObject() => _kitchenObject;
+
+        public bool HasKitchenObject() => GetKitchenObject() != null;
+
+        public void ClearKitchenObject() => SetKitchenObject(null);
+
+        public void SetKitchenObject(KitchenObject kitchenObject)
+        {
+            _kitchenObject = kitchenObject;
         }
     }
 }

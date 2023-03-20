@@ -1,31 +1,20 @@
 using UnityEngine;
+using ZZOT.KitchenChaos.Interfaces;
 using ZZOT.KitchenChaos.Scriptable;
+using ZZOT.KitchenChaos.User;
 
 namespace ZZOT.KitchenChaos.Furniture
 {
-    public class ClearCounter : MonoBehaviour
+    public class ClearCounter : MonoBehaviour, IKitchenObjectParent
     {
         [SerializeField] private Transform _counterTopPoint;
         [SerializeField] private KitchenObjectSO _kitchenObjectSO;
-        [SerializeField] private ClearCounter _secontClearCounter;
-        [SerializeField] private bool _testing;
 
         private KitchenObject _kitchenObject;
 
-        private void Update()
+        public void Interact(Player player)
         {
-            if(_testing && Input.GetKeyDown(KeyCode.T)) 
-            {
-                if(_kitchenObject != null)
-                {
-                    _kitchenObject.SetClearCounter(_secontClearCounter);
-                }
-            }
-        }
-
-        public void Interact()
-        {
-            if(_kitchenObject == null)
+            if (_kitchenObject == null)
             {
                 var kitchenObjectTransform = Instantiate(
                                                 original: _kitchenObjectSO.prefab,
@@ -33,28 +22,26 @@ namespace ZZOT.KitchenChaos.Furniture
 
                 //kitchenObjectTransform.localPosition = Vector3.zero;
 
-                kitchenObjectTransform.GetComponent<KitchenObject>().SetClearCounter(this);
+                kitchenObjectTransform.GetComponent<KitchenObject>().SetKitchenObjectParent(this);
+            }
+            else
+            {
+                _kitchenObject.SetKitchenObjectParent(player);
             }
 
         }
 
-        public Transform GetKitchenObjectFollowTransform()
-        {
-            return _counterTopPoint;    
-        }
+        public Transform GetKitchenObjectFollowTransform() => _counterTopPoint;
+
+        public KitchenObject GetKitchenObject() => _kitchenObject;
+
+        public bool HasKitchenObject() => GetKitchenObject() != null;
+
+        public void ClearKitchenObject() => SetKitchenObject(null);
 
         public void SetKitchenObject(KitchenObject kitchenObject)
         {
             _kitchenObject = kitchenObject;
         }
-
-        public KitchenObject GetKitchenObject() => _kitchenObject;
-
-        public void ClearKitchenObject()
-        {
-            _kitchenObject = null;
-        }
-
-        public bool HasKitchenObject() => _kitchenObject != null;
     }
 }

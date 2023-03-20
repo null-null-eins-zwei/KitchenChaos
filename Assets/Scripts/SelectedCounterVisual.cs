@@ -12,10 +12,10 @@ namespace ZZOT.KitchenChaos.Furniture
         void Start()
         {
             // Can't do this on Awake() because it is possible that this will be awaken earlier then Player 
-            Player.Player.Instance.OnSelectedConterChanged += Player_OnSelectedConterChanged;
+            User.Player.Instance.OnSelectedConterChanged += Player_OnSelectedConterChanged;
         }
 
-        private void Player_OnSelectedConterChanged(object sender, Player.Player.OnSelectedConterChangedEventArgs e)
+        private void Player_OnSelectedConterChanged(object sender, User.Player.OnSelectedConterChangedEventArgs e)
         {
             if(e.selectedCounter == _clearCounter)
             {
