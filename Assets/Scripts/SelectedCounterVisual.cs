@@ -6,8 +6,8 @@ namespace ZZOT.KitchenChaos.Furniture
     public class SelectedCounterVisual : MonoBehaviour
     {
 
-        [SerializeField] private ClearCounter _clearCounter;
-        [SerializeField] private GameObject _visualGameObject;
+        [SerializeField] private BaseCounter _counter;
+        [SerializeField] private GameObject[] _visualGameObject;
 
         // Start is called before the first frame update
         void Start()
@@ -18,7 +18,7 @@ namespace ZZOT.KitchenChaos.Furniture
 
         private void Player_OnSelectedConterChanged(object sender, Player.OnSelectedConterChangedEventArgs e)
         {
-            if(e.selectedCounter == _clearCounter)
+            if (e.selectedCounter == _counter)
             {
                 Show();
             }
@@ -28,14 +28,16 @@ namespace ZZOT.KitchenChaos.Furniture
             }
         }
 
-        private void Show()
-        {
-            _visualGameObject.SetActive(true);
-        }
+        private void Show() => SetVisualsActive(true);
 
-        private void Hide()
+        private void Hide() => SetVisualsActive(false);
+
+        private void SetVisualsActive(bool state)
         {
-            _visualGameObject.SetActive(false);
+            foreach (var item in _visualGameObject)
+            {
+                item.SetActive(state);
+            }
         }
     }
 }

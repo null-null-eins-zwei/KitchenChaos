@@ -1,20 +1,16 @@
 using UnityEngine;
-using ZZOT.KitchenChaos.Interfaces;
 using ZZOT.KitchenChaos.Scriptable;
 using ZZOT.KitchenChaos.User;
 
 namespace ZZOT.KitchenChaos.Furniture
 {
-    public class ClearCounter : MonoBehaviour, IKitchenObjectParent
+    public class ClearCounter : BaseCounter
     {
-        [SerializeField] private Transform _counterTopPoint;
-        [SerializeField] private KitchenObjectSO _kitchenObjectSO;
+        [SerializeField] protected KitchenObjectSO _kitchenObjectSO;
 
-        private KitchenObject _kitchenObject;
-
-        public void Interact(Player player)
+        public override void Interact(Player player)
         {
-            if (_kitchenObject == null)
+            if (!HasKitchenObject())
             {
                 var kitchenObjectTransform = Instantiate(
                                                 original: _kitchenObjectSO.prefab,
@@ -26,22 +22,8 @@ namespace ZZOT.KitchenChaos.Furniture
             }
             else
             {
-                _kitchenObject.SetKitchenObjectParent(player);
+                GetKitchenObject().SetKitchenObjectParent(player);
             }
-
-        }
-
-        public Transform GetKitchenObjectFollowTransform() => _counterTopPoint;
-
-        public KitchenObject GetKitchenObject() => _kitchenObject;
-
-        public bool HasKitchenObject() => GetKitchenObject() != null;
-
-        public void ClearKitchenObject() => SetKitchenObject(null);
-
-        public void SetKitchenObject(KitchenObject kitchenObject)
-        {
-            _kitchenObject = kitchenObject;
         }
     }
 }

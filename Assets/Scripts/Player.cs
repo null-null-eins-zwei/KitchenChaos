@@ -18,7 +18,7 @@ namespace ZZOT.KitchenChaos.User
 
         public class OnSelectedConterChangedEventArgs : EventArgs
         {
-            public ClearCounter selectedCounter;
+            public BaseCounter selectedCounter;
         }
 
         [SerializeField] private float _playerSpeed = 7f;
@@ -29,7 +29,7 @@ namespace ZZOT.KitchenChaos.User
 
         private bool _isWalking = false;
         private Vector3 _lastInteractDirection;
-        private ClearCounter _selectedCounter;
+        private BaseCounter _selectedCounter;
 
         private const float _playerSize = 0.5f;
         private const float _playerHeight = 2f;
@@ -144,8 +144,8 @@ namespace ZZOT.KitchenChaos.User
 
             if (hit)
             {
-                var isClearCounter = raycastHit.transform.TryGetComponent(out ClearCounter counter);
-                if (isClearCounter)
+                var isCounter = raycastHit.transform.TryGetComponent(out BaseCounter counter);
+                if (isCounter)
                 {
                     if (counter != _selectedCounter)
                     {
@@ -175,7 +175,7 @@ namespace ZZOT.KitchenChaos.User
             return !hit;
         }
 
-        private void SetSelectedCounter(ClearCounter selected)
+        private void SetSelectedCounter(BaseCounter selected)
         {
             _selectedCounter = selected;
             OnSelectedConterChanged?.Invoke(

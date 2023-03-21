@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using ZZOT.KitchenChaos.Furniture;
 using ZZOT.KitchenChaos.Interfaces;
 using ZZOT.KitchenChaos.Scriptable;
 
@@ -17,8 +14,9 @@ namespace ZZOT.KitchenChaos
 
         public IKitchenObjectParent GetKitchenObjectParent => _kitchenObjectParent;
 
-        public void SetKitchenObjectParent(IKitchenObjectParent newParent) {
-            if(_kitchenObjectParent != null)
+        public void SetKitchenObjectParent(IKitchenObjectParent newParent)
+        {
+            if (_kitchenObjectParent != null)
             {
                 _kitchenObjectParent.ClearKitchenObject();
             }
