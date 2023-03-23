@@ -10,19 +10,19 @@ namespace ZZOT.KitchenChaos.Furniture
 
         public override void Interact(Player player)
         {
-            if (!HasKitchenObject())
+            var playerItem = player.GetKitchenObject();
+            var counterItem = this.GetKitchenObject();
+
+            if(counterItem != null)
             {
-                var kitchenObjectTransform = Instantiate(
-                                                original: _kitchenObjectSO.prefab,
-                                                parent: _counterTopPoint);
-
-                //kitchenObjectTransform.localPosition = Vector3.zero;
-
-                kitchenObjectTransform.GetComponent<KitchenObject>().SetKitchenObjectParent(this);
+                player.ClearKitchenObject();
+                counterItem.SetKitchenObjectParent(player);
             }
-            else
+
+            if(playerItem != null)
             {
-                GetKitchenObject().SetKitchenObjectParent(player);
+                this.ClearKitchenObject();
+                playerItem.SetKitchenObjectParent(this);
             }
         }
     }

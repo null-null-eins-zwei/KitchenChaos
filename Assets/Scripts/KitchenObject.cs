@@ -16,7 +16,8 @@ namespace ZZOT.KitchenChaos
 
         public void SetKitchenObjectParent(IKitchenObjectParent newParent)
         {
-            if (_kitchenObjectParent != null)
+            if (_kitchenObjectParent != null
+                    && _kitchenObjectParent.GetKitchenObject() == this)
             {
                 _kitchenObjectParent.ClearKitchenObject();
             }
