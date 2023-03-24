@@ -7,6 +7,7 @@ namespace ZZOT.KitchenChaos.UserInputSystem
     public class UserInput : MonoBehaviour
     {
         public event EventHandler OnInteractAction;
+        public event EventHandler OnInteractAlternateAction;
 
         UserInputActions _userInputActions;
 
@@ -16,10 +17,15 @@ namespace ZZOT.KitchenChaos.UserInputSystem
             _userInputActions.Player.Enable();
 
             _userInputActions.Player.Interact.performed += Interact_performed;
+            _userInputActions.Player.InteractAlternate.performed += InteractAlternate_performed;
         }
+
 
         private void Interact_performed(CallbackContext context) =>
             OnInteractAction?.Invoke(this, EventArgs.Empty);
+
+        private void InteractAlternate_performed(CallbackContext obj) =>
+            OnInteractAlternateAction?.Invoke(this, EventArgs.Empty);
 
         public Vector2 GetMovementVectorNormalized()
         {

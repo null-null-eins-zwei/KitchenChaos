@@ -33,5 +33,21 @@ namespace ZZOT.KitchenChaos
             transform.parent = _kitchenObjectParent.GetKitchenObjectFollowTransform();
             transform.localPosition = Vector3.zero;
         }
+
+        public void DestroySelf()
+        {
+            _kitchenObjectParent.ClearKitchenObject();
+            Destroy(gameObject);
+        }
+
+        public static KitchenObject SpawnKitchenObject(KitchenObjectSO kitchenObjectSo, IKitchenObjectParent parent)
+        {
+            var kitchenObjectTransform = Instantiate(kitchenObjectSo.prefab);
+
+            var kitchenObject = kitchenObjectTransform.GetComponent<KitchenObject>();
+            kitchenObject.SetKitchenObjectParent(parent);
+
+            return kitchenObject;
+        }
     }
 }

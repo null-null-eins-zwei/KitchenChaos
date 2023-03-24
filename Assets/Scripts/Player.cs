@@ -38,7 +38,9 @@ namespace ZZOT.KitchenChaos.User
         private void Start()
         {
             _input.OnInteractAction += input_OnInteractAction;
+            _input.OnInteractAlternateAction += input_OnInteractAlternateAction;
         }
+
 
         private void Awake()
         {
@@ -55,6 +57,14 @@ namespace ZZOT.KitchenChaos.User
             if (_selectedCounter != null)
             {
                 _selectedCounter.Interact(this);
+            }
+        }
+        
+        private void input_OnInteractAlternateAction(object sender, EventArgs e)
+        {
+            if (_selectedCounter != null)
+            {
+                _selectedCounter.InteractAlternate(this);
             }
         }
 

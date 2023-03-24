@@ -15,6 +15,14 @@ namespace ZZOT.KitchenChaos.Furniture
             Debug.LogError($"{nameof(BaseCounter)}.{nameof(Interact)}()");
         }
 
+        public virtual void InteractAlternate(Player player)
+        {
+            // By default just do normal interaction
+            Interact(player);
+        }
+
+        
+
         public Transform GetKitchenObjectFollowTransform() => _counterTopPoint;
 
         public KitchenObject GetKitchenObject() => _kitchenObject;

@@ -18,11 +18,7 @@ namespace ZZOT.KitchenChaos.Furniture
                 return;
             }
 
-            var kitchenObjectTransform = Instantiate(
-                                            original: _kitchenObjectSO.prefab,
-                                            parent: _counterTopPoint);
-
-            kitchenObjectTransform.GetComponent<KitchenObject>().SetKitchenObjectParent(player);
+            KitchenObject.SpawnKitchenObject(_kitchenObjectSO, player);
 
             OnPlayerGrabbedObject?.Invoke(this, EventArgs.Empty);
         }
