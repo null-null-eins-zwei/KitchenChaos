@@ -11,14 +11,18 @@ namespace ZZOT.KitchenChaos.Furniture
     {
         [SerializeField] private CuttingRecipeSO[] _allRecipes;
 
+        private int _cuttingProgress = 0;
+
         public override void Interact(Player player)
         {
             var playerItem = player.GetKitchenObject();
-            var receipeForPlayerItemExist = (playerItem != null)
-                                            && HasRecipeWithInput(playerItem.KitchenObjectSo);
-            if (!receipeForPlayerItemExist)
+
+            if (playerItem != null)
             {
-                return;
+                if (!HasRecipeWithInput(playerItem.KitchenObjectSo))
+                {
+                    return;
+                }
             }
 
             var counterItem = this.GetKitchenObject();
@@ -33,6 +37,8 @@ namespace ZZOT.KitchenChaos.Furniture
             {
                 this.ClearKitchenObject();
                 playerItem.SetKitchenObjectParent(this);
+                
+                _cuttingProgress = 0;
             }
         }
 
@@ -40,6 +46,9 @@ namespace ZZOT.KitchenChaos.Furniture
         {
             if(HasKitchenObject())
             {
+                _cuttingProgress++;
+
+
                 var onTable = GetKitchenObject();
 
                 if (!HasRecipeWithInput(onTable.KitchenObjectSo))
@@ -47,27 +56,40 @@ namespace ZZOT.KitchenChaos.Furniture
                     return;
                 }
 
-                var output = GetOutputForInput(onTable.KitchenObjectSo);
+                var recipe = GetRecipeForInput(onTable.KitchenObjectSo);
 
-                if(output != null)
+                if(recipe != null
+                    && _cuttingProgress >= recipe.cuttingProgressMax)
                 {
                     onTable.DestroySelf();
-                    KitchenObject.SpawnKitchenObject(output, this);
+                    KitchenObject.SpawnKitchenObject(recipe.output, this);
                 }
                 
             }
         }
 
-        private bool HasRecipeWithInput(KitchenObjectSO input) => _allRecipes.Any(r => r.input == input);
+        private bool HasRecipeWithInput(KitchenObjectSO input) => GetRecipeForInput(input) != null;
 
-        private KitchenObjectSO GetOutputForInput(KitchenObjectSO input)
+        private CuttingRecipeSO GetRecipeForInput(KitchenObjectSO input)
         {
             foreach (var recipe in _allRecipes)
             {
-                if(recipe.input == input)
+                if (recipe.input == input)
                 {
-                    return recipe.output;
+                    return recipe;
                 }
+            }
+
+            return null;
+        }
+
+        private KitchenObjectSO GetOutputForInput(KitchenObjectSO input)
+        {
+            var recipe = GetRecipeForInput(input);
+
+            if(recipe != null)
+            {
+                return recipe.output;
             }
 
             return null;

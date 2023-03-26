@@ -9,5 +9,6 @@ namespace ZZOT.KitchenChaos.Scriptable
     {
         public KitchenObjectSO input;
         public KitchenObjectSO output;
+        public int cuttingProgressMax = 3;
     }
 }
