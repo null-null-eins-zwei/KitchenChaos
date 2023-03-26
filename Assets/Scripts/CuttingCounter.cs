@@ -1,7 +1,9 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using ZZOT.KitchenChaos.Scriptable;
 using ZZOT.KitchenChaos.User;
 
@@ -9,6 +11,13 @@ namespace ZZOT.KitchenChaos.Furniture
 {
     public class CuttingCounter : BaseCounter
     {
+        public event EventHandler OnCut;
+        public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
+        public class OnProgressChangedEventArgs : EventArgs 
+        { 
+            public float progress;
+        }
+
         [SerializeField] private CuttingRecipeSO[] _allRecipes;
 
         private int _cuttingProgress = 0;
@@ -31,6 +40,14 @@ namespace ZZOT.KitchenChaos.Furniture
             {
                 player.ClearKitchenObject();
                 counterItem.SetKitchenObjectParent(player);
+
+                _cuttingProgress = 0;
+                OnProgressChanged?.Invoke(
+                    this,
+                    new OnProgressChangedEventArgs()
+                    {
+                        progress = 0
+                    });
             }
 
             if (playerItem != null)
@@ -39,6 +56,12 @@ namespace ZZOT.KitchenChaos.Furniture
                 playerItem.SetKitchenObjectParent(this);
                 
                 _cuttingProgress = 0;
+                OnProgressChanged?.Invoke(
+                    this,
+                    new OnProgressChangedEventArgs()
+                    {
+                        progress = 0
+                    });
             }
         }
 
@@ -46,9 +69,6 @@ namespace ZZOT.KitchenChaos.Furniture
         {
             if(HasKitchenObject())
             {
-                _cuttingProgress++;
-
-
                 var onTable = GetKitchenObject();
 
                 if (!HasRecipeWithInput(onTable.KitchenObjectSo))
@@ -58,13 +78,28 @@ namespace ZZOT.KitchenChaos.Furniture
 
                 var recipe = GetRecipeForInput(onTable.KitchenObjectSo);
 
-                if(recipe != null
-                    && _cuttingProgress >= recipe.cuttingProgressMax)
+                _cuttingProgress++;
+
+                if(_cuttingProgress >= recipe.cuttingProgressMax)
                 {
                     onTable.DestroySelf();
                     KitchenObject.SpawnKitchenObject(recipe.output, this);
+
+                    OnProgressChanged?.Invoke(
+                        this,
+                        new OnProgressChangedEventArgs() { progress = 0 });
                 }
-                
+                else
+                {
+                    OnProgressChanged?.Invoke(
+                        this,
+                        new OnProgressChangedEventArgs()
+                        {
+                            progress = (float)_cuttingProgress / recipe.cuttingProgressMax,
+                        });
+
+                    OnCut?.Invoke(this, EventArgs.Empty);
+                }
             }
         }
 
