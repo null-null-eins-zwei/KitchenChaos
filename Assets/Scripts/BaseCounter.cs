@@ -17,8 +17,8 @@ namespace ZZOT.KitchenChaos.Furniture
 
         public virtual void InteractAlternate(Player player)
         {
-            // By default just do normal interaction
-            Interact(player);
+            // By default just do nothing to not confuse player
+            return;
         }
 
         

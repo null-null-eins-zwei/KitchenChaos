@@ -10,9 +10,9 @@ namespace ZZOT.KitchenChaos
 
         private IKitchenObjectParent _kitchenObjectParent;
 
-        public KitchenObjectSO GetKitchenObjectSo => _kitchenObjectSo;
+        public KitchenObjectSO KitchenObjectSo => _kitchenObjectSo;
 
-        public IKitchenObjectParent GetKitchenObjectParent => _kitchenObjectParent;
+        public IKitchenObjectParent KitchenObjectParent => _kitchenObjectParent;
 
         public void SetKitchenObjectParent(IKitchenObjectParent newParent)
         {
