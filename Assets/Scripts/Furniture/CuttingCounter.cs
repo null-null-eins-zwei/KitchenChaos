@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.EventSystems;
-using ZZOT.KitchenChaos.Scriptable;
+using ZZOT.KitchenChaos.ScriptableObjects;
 using ZZOT.KitchenChaos.User;
 
 namespace ZZOT.KitchenChaos.Furniture

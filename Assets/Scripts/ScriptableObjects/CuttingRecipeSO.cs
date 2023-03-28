@@ -1,8 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-namespace ZZOT.KitchenChaos.Scriptable
+namespace ZZOT.KitchenChaos.ScriptableObjects
 {
     [CreateAssetMenu()]
     public class CuttingRecipeSO : ScriptableObject

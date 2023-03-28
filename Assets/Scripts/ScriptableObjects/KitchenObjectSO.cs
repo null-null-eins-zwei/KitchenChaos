@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ZZOT.KitchenChaos.Scriptable
+namespace ZZOT.KitchenChaos.ScriptableObjects
 {
     [CreateAssetMenu()]
     public class KitchenObjectSO : ScriptableObject

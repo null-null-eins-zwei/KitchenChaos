@@ -1,6 +1,6 @@
 using UnityEngine;
 using ZZOT.KitchenChaos.Interfaces;
-using ZZOT.KitchenChaos.Scriptable;
+using ZZOT.KitchenChaos.ScriptableObjects;
 
 namespace ZZOT.KitchenChaos
 {
