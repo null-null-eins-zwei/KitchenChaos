@@ -9,14 +9,10 @@ using ZZOT.KitchenChaos.User;
 
 namespace ZZOT.KitchenChaos.Furniture
 {
-    public class CuttingCounter : BaseCounter
+    public class CuttingCounter : BaseCounter, IHasProgress
     {
         public event EventHandler OnCut;
-        public event EventHandler<OnProgressChangedEventArgs> OnProgressChanged;
-        public class OnProgressChangedEventArgs : EventArgs 
-        { 
-            public float progress;
-        }
+        public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
         [SerializeField] private CuttingRecipeSO[] _allRecipes;
 
@@ -44,10 +40,7 @@ namespace ZZOT.KitchenChaos.Furniture
                 _cuttingProgress = 0;
                 OnProgressChanged?.Invoke(
                     this,
-                    new OnProgressChangedEventArgs()
-                    {
-                        progress = 0
-                    });
+                    new IHasProgress.OnProgressChangedEventArgs() { progressNormalized = 0 });
             }
 
             if (playerItem != null)
@@ -58,9 +51,9 @@ namespace ZZOT.KitchenChaos.Furniture
                 _cuttingProgress = 0;
                 OnProgressChanged?.Invoke(
                     this,
-                    new OnProgressChangedEventArgs()
+                    new IHasProgress.OnProgressChangedEventArgs()
                     {
-                        progress = 0
+                        progressNormalized = 0,
                     });
             }
         }
@@ -87,15 +80,15 @@ namespace ZZOT.KitchenChaos.Furniture
 
                     OnProgressChanged?.Invoke(
                         this,
-                        new OnProgressChangedEventArgs() { progress = 0 });
+                        new IHasProgress.OnProgressChangedEventArgs() { progressNormalized = 0 });
                 }
                 else
                 {
                     OnProgressChanged?.Invoke(
                         this,
-                        new OnProgressChangedEventArgs()
+                        new IHasProgress.OnProgressChangedEventArgs()
                         {
-                            progress = (float)_cuttingProgress / recipe.cuttingProgressMax,
+                            progressNormalized = (float)_cuttingProgress / recipe.cuttingProgressMax,
                         });
 
                     OnCut?.Invoke(this, EventArgs.Empty);

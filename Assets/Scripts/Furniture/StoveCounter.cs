@@ -7,9 +7,11 @@ using static ZZOT.KitchenChaos.Furniture.CuttingCounter;
 
 namespace ZZOT.KitchenChaos.Furniture
 {
-    public class StoveCounter : BaseCounter
+    public class StoveCounter : BaseCounter, IHasProgress
     {
         public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
+        public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
+
         public class OnStateChangedEventArgs: EventArgs
         {
             public StoveItemState state;
@@ -65,14 +67,28 @@ namespace ZZOT.KitchenChaos.Furniture
                     {
                         _fryingTimer += Time.deltaTime;
 
+                        OnProgressChanged?.Invoke(
+                            this,
+                            new IHasProgress.OnProgressChangedEventArgs
+                            {
+                                progressNormalized = _fryingTimer / _fryingRecipe.fryingTimerSecMax,
+                            });
+
                         if (_fryingTimer > _fryingRecipe.fryingTimerSecMax)
                         {
                             GetKitchenObject().DestroySelf();
                             KitchenObject.SpawnKitchenObject(_fryingRecipe.output, this);
 
                             _burningTimer = 0;
-                            State = StoveItemState.Fried;
                             _burningRecipe = GetBurningRecipeForInput(_fryingRecipe.output);
+                            
+                            State = StoveItemState.Fried;
+                            OnProgressChanged?.Invoke(
+                                this,
+                                new IHasProgress.OnProgressChangedEventArgs
+                                {
+                                    progressNormalized = 1,
+                                });
                         }
                     }
 
@@ -80,12 +96,25 @@ namespace ZZOT.KitchenChaos.Furniture
                 case StoveItemState.Fried:
                     _burningTimer += Time.deltaTime;
 
+                    OnProgressChanged?.Invoke(
+                            this,
+                            new IHasProgress.OnProgressChangedEventArgs
+                            {
+                                progressNormalized = _burningTimer / _burningRecipe.burningTimerSecMax,
+                            });
+
                     if (_burningTimer > _burningRecipe.burningTimerSecMax)
                     {
                         GetKitchenObject().DestroySelf(); 
                         KitchenObject.SpawnKitchenObject(_burningRecipe.output, this);
 
                         State = StoveItemState.Burned;
+                        OnProgressChanged?.Invoke(
+                            this,
+                            new IHasProgress.OnProgressChangedEventArgs
+                            {
+                                progressNormalized = 1,
+                            });
                     }
 
                     break; 
@@ -124,9 +153,6 @@ namespace ZZOT.KitchenChaos.Furniture
                 _fryingRecipe = GetFryingRecipeForInput(playerItem.KitchenObjectSo);
                 _burningRecipe = GetBurningRecipeForInput(playerItem.KitchenObjectSo);
 
-                _fryingTimer = 0;
-                _burningTimer = 0;
-
                 State = StoveItemState.Frying;
                 if (_burningRecipe != null)
                 {
@@ -135,10 +161,18 @@ namespace ZZOT.KitchenChaos.Furniture
             }
             else
             {
-                _fryingTimer = 0;
-                _burningTimer = 0;
                 State = StoveItemState.Idle;
             }
+
+            _fryingTimer = 0;
+            _burningTimer = 0;
+
+            OnProgressChanged?.Invoke(
+                                this,
+                                new IHasProgress.OnProgressChangedEventArgs
+                                {
+                                    progressNormalized = 0,
+                                });
         }
 
         private bool HasRecipeWithInput(KitchenObjectSO input) => GetFryingRecipeForInput(input) != null;
