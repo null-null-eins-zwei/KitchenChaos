@@ -8,8 +8,7 @@ namespace ZZOT.KitchenChaos.Furniture
 
         private Animator _animator;
 
-        [SerializeField]
-        private CuttingCounter _cuttingCounter;
+        [SerializeField] private CuttingCounter _cuttingCounter;
 
         // Start is called before the first frame update
         private void Awake()
