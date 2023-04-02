@@ -1,9 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using ZZOT.KitchenChaos.Interfaces;
 using ZZOT.KitchenChaos.ScriptableObjects;
 using ZZOT.KitchenChaos.User;
 
@@ -20,79 +17,99 @@ namespace ZZOT.KitchenChaos.Furniture
 
         public override void Interact(Player player)
         {
-            var playerItem = player.GetKitchenObject();
+            var counterItem = this.GetKitchenObject();
+            var counterHasItem = this.HasKitchenObject();
+            var counterHasPlate = this.HasPlate();
 
-            if (playerItem != null)
+            var playerItem = player.GetKitchenObject();
+            var playerHasItem = player.HasKitchenObject();
+            var playerHasPlate = player.HasPlate();
+
+            if (playerHasPlate
+                    && counterHasItem
+                    && !counterHasPlate)
             {
-                if (!HasRecipeWithInput(playerItem.KitchenObjectSo))
+                var plate = playerItem as PlateKitchenObject;
+
+                if (plate.TryAddIngridient(counterItem.KitchenObjectSo))
                 {
-                    return;
+                    counterItem.DestroySelf();
                 }
             }
-
-            var counterItem = this.GetKitchenObject();
-
-            if (counterItem != null)
+            else
             {
-                player.ClearKitchenObject();
-                counterItem.SetKitchenObjectParent(player);
-
-                _cuttingProgress = 0;
-                OnProgressChanged?.Invoke(
-                    this,
-                    new IHasProgress.OnProgressChangedEventArgs() { progressNormalized = 0 });
-            }
-
-            if (playerItem != null)
-            {
-                this.ClearKitchenObject();
-                playerItem.SetKitchenObjectParent(this);
-                
-                _cuttingProgress = 0;
-                OnProgressChanged?.Invoke(
-                    this,
-                    new IHasProgress.OnProgressChangedEventArgs()
+                if (playerHasItem)
+                {
+                    if (!HasRecipeWithInput(playerItem.KitchenObjectSo))
                     {
-                        progressNormalized = 0,
-                    });
+                        return;
+                    }
+                }
+
+
+                if (counterHasItem)
+                {
+                    player.ClearKitchenObject();
+                    counterItem.SetKitchenObjectParent(player);
+
+                    _cuttingProgress = 0;
+                    OnProgressChanged?.Invoke(
+                        this,
+                        new IHasProgress.OnProgressChangedEventArgs() { progressNormalized = 0 });
+                }
+
+                if (playerHasItem)
+                {
+                    this.ClearKitchenObject();
+                    playerItem.SetKitchenObjectParent(this);
+
+                    _cuttingProgress = 0;
+                    OnProgressChanged?.Invoke(
+                        this,
+                        new IHasProgress.OnProgressChangedEventArgs()
+                        {
+                            progressNormalized = 0,
+                        });
+                }
             }
         }
 
         public override void InteractAlternate(Player player)
         {
-            if(HasKitchenObject())
+            if (!HasKitchenObject())
             {
-                var onTable = GetKitchenObject();
+                return;
+            }
 
-                if (!HasRecipeWithInput(onTable.KitchenObjectSo))
-                {
-                    return;
-                }
+            var onTable = GetKitchenObject();
+            if (!HasRecipeWithInput(onTable.KitchenObjectSo))
+            {
+                return;
+            }
 
-                var recipe = GetRecipeForInput(onTable.KitchenObjectSo);
+            var recipe = GetRecipeForInput(onTable.KitchenObjectSo);
 
-                _cuttingProgress++;
+            _cuttingProgress++;
 
-                if(_cuttingProgress >= recipe.cuttingProgressMax)
-                {
-                    onTable.DestroySelf();
-                    KitchenObject.SpawnKitchenObject(recipe.output, this);
+            if (_cuttingProgress >= recipe.cuttingProgressMax)
+            {
+                onTable.DestroySelf();
+                KitchenObject.SpawnKitchenObject(recipe.output, this);
 
-                    OnProgressChanged?.Invoke(
-                        this,
-                        new IHasProgress.OnProgressChangedEventArgs() { progressNormalized = 0 });
-                }
-                else
-                {
-                    OnProgressChanged?.Invoke(
-                        this,
-                        new IHasProgress.OnProgressChangedEventArgs()
-                        {
-                            progressNormalized = (float)_cuttingProgress / recipe.cuttingProgressMax,
-                        });
+                OnProgressChanged?.Invoke(
+                    this,
+                    new IHasProgress.OnProgressChangedEventArgs() { progressNormalized = 0 });
+            }
+            else
+            {
+                OnProgressChanged?.Invoke(
+                    this,
+                    new IHasProgress.OnProgressChangedEventArgs()
+                    {
+                        progressNormalized = (float)_cuttingProgress / recipe.cuttingProgressMax,
+                    });
 
-                    OnCut?.Invoke(this, EventArgs.Empty);
-                }
+                OnCut?.Invoke(this, EventArgs.Empty);
             }
         }
 
@@ -115,7 +132,7 @@ namespace ZZOT.KitchenChaos.Furniture
         {
             var recipe = GetRecipeForInput(input);
 
-            if(recipe != null)
+            if (recipe != null)
             {
                 return recipe.output;
             }

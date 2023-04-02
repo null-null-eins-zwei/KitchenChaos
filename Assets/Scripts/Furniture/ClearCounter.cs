@@ -1,4 +1,5 @@
 using UnityEngine;
+using ZZOT.KitchenChaos.Interfaces;
 using ZZOT.KitchenChaos.ScriptableObjects;
 using ZZOT.KitchenChaos.User;
 
@@ -10,19 +11,48 @@ namespace ZZOT.KitchenChaos.Furniture
 
         public override void Interact(Player player)
         {
-            var playerItem = player.GetKitchenObject();
             var counterItem = this.GetKitchenObject();
+            var counterHasItem = this.HasKitchenObject();
+            var counterHasPlate = this.HasPlate();
 
-            if(counterItem != null)
+            var playerItem = player.GetKitchenObject();
+            var playerHasItem = player.HasKitchenObject();
+            var playerHasPlate = player.HasPlate();
+
+            if (playerHasPlate
+                    && counterHasItem
+                    && !counterHasPlate)
             {
-                player.ClearKitchenObject();
-                counterItem.SetKitchenObjectParent(player);
+                var plate = playerItem as PlateKitchenObject;
+
+                if (plate.TryAddIngridient(counterItem.KitchenObjectSo))
+                {
+                    counterItem.DestroySelf();
+                }
+            } else if (counterHasPlate
+                        && playerHasItem
+                        && !playerHasPlate)
+            {
+                var plate = counterItem as PlateKitchenObject;
+
+                if (plate.TryAddIngridient(playerItem.KitchenObjectSo))
+                {
+                    playerItem.DestroySelf();
+                }
             }
-
-            if(playerItem != null)
+            else
             {
-                this.ClearKitchenObject();
-                playerItem.SetKitchenObjectParent(this);
+                if (counterHasItem)
+                {
+                    player.ClearKitchenObject();
+                    counterItem.SetKitchenObjectParent(player);
+                }
+
+                if (playerHasItem)
+                {
+                    this.ClearKitchenObject();
+                    playerItem.SetKitchenObjectParent(this);
+                }
             }
         }
     }

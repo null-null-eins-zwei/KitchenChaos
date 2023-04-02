@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using ZZOT.KitchenChaos.Interfaces;
 using ZZOT.KitchenChaos.ScriptableObjects;
 using ZZOT.KitchenChaos.User;
 using static UnityEngine.EventSystems.EventTrigger;
@@ -127,9 +128,16 @@ namespace ZZOT.KitchenChaos.Furniture
 
         public override void Interact(Player player)
         {
-            var playerItem = player.GetKitchenObject();
+            var counterItem = this.GetKitchenObject();
+            var counterHasItem = this.HasKitchenObject();
+            var counterHasPlate = this.HasPlate();
 
-            if (playerItem != null)
+            var playerItem = player.GetKitchenObject();
+            var playerHasItem = player.HasKitchenObject();
+            var playerHasPlate = player.HasPlate();
+
+            if (playerHasItem
+                && !playerHasPlate)
             {
                 if (!HasRecipeWithInput(playerItem.KitchenObjectSo))
                 {
@@ -137,15 +145,29 @@ namespace ZZOT.KitchenChaos.Furniture
                 }
             }
 
-            var counterItem = this.GetKitchenObject();
-
-            if (counterItem != null)
+            if (counterHasItem)
             {
-                player.ClearKitchenObject();
-                counterItem.SetKitchenObjectParent(player);
+                if (playerHasPlate)
+                {
+                    var plate = playerItem as PlateKitchenObject;
+                    if (plate.TryAddIngridient(counterItem.KitchenObjectSo))
+                    {
+                        counterItem.DestroySelf();
+                    }
+                    else
+                    {
+                        return;
+                    }
+                }
+                else
+                {
+                    player.ClearKitchenObject();
+                    counterItem.SetKitchenObjectParent(player);
+                }
             }
 
-            if (playerItem != null)
+            if (playerHasItem
+                && !playerHasPlate)
             {
                 this.ClearKitchenObject();
                 playerItem.SetKitchenObjectParent(this);
