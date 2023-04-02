@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using static UnityEngine.InputSystem.InputAction;
 
-namespace ZZOT.KitchenChaos.UserInputSystem
+namespace ZZOT.KitchenChaos.Character
 {
     public class UserInput : MonoBehaviour
     {

@@ -1,10 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-using ZZOT.KitchenChaos.Furniture;
-using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
-using static ZZOT.KitchenChaos.Furniture.CuttingCounter;
 
-namespace ZZOT.KitchenChaos
+namespace ZZOT.KitchenChaos.UI
 {
     public class ProgressBarUI : MonoBehaviour
     {
@@ -18,7 +15,7 @@ namespace ZZOT.KitchenChaos
             {
                 Debug.LogError($"{_counter} has no {nameof(IHasProgress)} interface.");
             }
-            
+
             _counter.OnProgressChanged += Sender_OnProgressChanged;
             SetProgress(0);
         }

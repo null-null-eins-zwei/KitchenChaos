@@ -1,8 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using ZZOT.KitchenChaos.ScriptableObjects;
-using ZZOT.KitchenChaos.User;
 
 namespace ZZOT.KitchenChaos.Furniture
 {
@@ -29,7 +27,7 @@ namespace ZZOT.KitchenChaos.Furniture
         private void PlatesCounter_OnPlateTaken(object sender, System.EventArgs e)
         {
             var lastPlate = _plates.LastOrDefault();
-            if(lastPlate == null) 
+            if (lastPlate == null)
             {
                 return;
             }

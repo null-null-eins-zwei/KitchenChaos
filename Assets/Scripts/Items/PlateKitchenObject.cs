@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using ZZOT.KitchenChaos.ScriptableObjects;
 
-namespace ZZOT.KitchenChaos
+namespace ZZOT.KitchenChaos.Items
 {
     public class PlateKitchenObject : KitchenObject
     {
@@ -43,6 +43,9 @@ namespace ZZOT.KitchenChaos
 
         public bool HasIngridient(KitchenObjectSO kitchenObjectSo) =>
             _kitchenObjectSoList.Contains(kitchenObjectSo);
+
+        public List<KitchenObjectSO> GetKitchenObjectSoList() =>
+            _kitchenObjectSoList;
 
         private bool CanAddIngridient(KitchenObjectSO kitchenObjectSo)
         {

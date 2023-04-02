@@ -1,10 +1,9 @@
 using System;
 using UnityEngine;
 using ZZOT.KitchenChaos.Furniture;
-using ZZOT.KitchenChaos.Interfaces;
-using ZZOT.KitchenChaos.UserInputSystem;
+using ZZOT.KitchenChaos.Items;
 
-namespace ZZOT.KitchenChaos.User
+namespace ZZOT.KitchenChaos.Character
 {
     public class Player : MonoBehaviour, IKitchenObjectParent
     {

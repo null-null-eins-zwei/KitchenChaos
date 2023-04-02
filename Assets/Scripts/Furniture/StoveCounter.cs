@@ -1,10 +1,8 @@
 using System;
 using UnityEngine;
-using ZZOT.KitchenChaos.Interfaces;
+using ZZOT.KitchenChaos.Character;
+using ZZOT.KitchenChaos.Items;
 using ZZOT.KitchenChaos.ScriptableObjects;
-using ZZOT.KitchenChaos.User;
-using static UnityEngine.EventSystems.EventTrigger;
-using static ZZOT.KitchenChaos.Furniture.CuttingCounter;
 
 namespace ZZOT.KitchenChaos.Furniture
 {
@@ -13,7 +11,7 @@ namespace ZZOT.KitchenChaos.Furniture
         public event EventHandler<OnStateChangedEventArgs> OnStateChanged;
         public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
-        public class OnStateChangedEventArgs: EventArgs
+        public class OnStateChangedEventArgs : EventArgs
         {
             public StoveItemState state;
         }
@@ -36,8 +34,7 @@ namespace ZZOT.KitchenChaos.Furniture
         private StoveItemState _state;
         private StoveItemState State {
             get => _state;
-            set 
-            {
+            set {
                 _state = value;
                 OnStateChanged?.Invoke(this, new OnStateChangedEventArgs() { state = _state });
             }
@@ -82,7 +79,7 @@ namespace ZZOT.KitchenChaos.Furniture
 
                             _burningTimer = 0;
                             _burningRecipe = GetBurningRecipeForInput(_fryingRecipe.output);
-                            
+
                             State = StoveItemState.Fried;
                             OnProgressChanged?.Invoke(
                                 this,
@@ -106,7 +103,7 @@ namespace ZZOT.KitchenChaos.Furniture
 
                     if (_burningTimer > _burningRecipe.burningTimerSecMax)
                     {
-                        GetKitchenObject().DestroySelf(); 
+                        GetKitchenObject().DestroySelf();
                         KitchenObject.SpawnKitchenObject(_burningRecipe.output, this);
 
                         State = StoveItemState.Burned;
@@ -118,7 +115,7 @@ namespace ZZOT.KitchenChaos.Furniture
                             });
                     }
 
-                    break; 
+                    break;
                 case StoveItemState.Burned:
                     break;
                 default:

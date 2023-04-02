@@ -1,7 +1,8 @@
 using System;
 using UnityEngine;
+using ZZOT.KitchenChaos.Character;
+using ZZOT.KitchenChaos.Items;
 using ZZOT.KitchenChaos.ScriptableObjects;
-using ZZOT.KitchenChaos.User;
 
 namespace ZZOT.KitchenChaos.Furniture
 {
@@ -21,10 +22,10 @@ namespace ZZOT.KitchenChaos.Furniture
         private void Update()
         {
             _spawnPlateTimer += Time.deltaTime;
-            if(_spawnPlateTimer > SPAWN_TIME)
+            if (_spawnPlateTimer > SPAWN_TIME)
             {
                 _spawnPlateTimer = 0;
-                if(_platesSpawnAmount < PLATES_MAX) 
+                if (_platesSpawnAmount < PLATES_MAX)
                 {
                     _platesSpawnAmount++;
                     OnPlateSpawn?.Invoke(this, EventArgs.Empty);
@@ -34,7 +35,7 @@ namespace ZZOT.KitchenChaos.Furniture
 
         public override void Interact(Player player)
         {
-            if(_platesSpawnAmount < 1) 
+            if (_platesSpawnAmount < 1)
             {
                 return;
             }

@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-namespace ZZOT.KitchenChaos.Interfaces
+namespace ZZOT.KitchenChaos.Items
 {
     public interface IKitchenObjectParent
     {

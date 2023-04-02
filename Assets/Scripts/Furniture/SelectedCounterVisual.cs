@@ -1,5 +1,5 @@
 using UnityEngine;
-using ZZOT.KitchenChaos.User;
+using ZZOT.KitchenChaos.Character;
 
 namespace ZZOT.KitchenChaos.Furniture
 {

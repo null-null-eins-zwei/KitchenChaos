@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace ZZOT.KitchenChaos
+namespace ZZOT.KitchenChaos.UI
 {
     public class LookAtCamera : MonoBehaviour
     {

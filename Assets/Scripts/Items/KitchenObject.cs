@@ -1,8 +1,8 @@
 using UnityEngine;
-using ZZOT.KitchenChaos.Interfaces;
+using ZZOT.KitchenChaos;
 using ZZOT.KitchenChaos.ScriptableObjects;
 
-namespace ZZOT.KitchenChaos
+namespace ZZOT.KitchenChaos.Items
 {
     public class KitchenObject : MonoBehaviour
     {
