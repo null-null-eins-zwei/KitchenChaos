@@ -5,7 +5,6 @@ namespace ZZOT.KitchenChaos.Furniture
 {
     public class SelectedCounterVisual : MonoBehaviour
     {
-
         [SerializeField] private BaseCounter _counter;
         [SerializeField] private GameObject[] _visualGameObject;
 
