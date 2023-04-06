@@ -9,8 +9,11 @@ namespace ZZOT.KitchenChaos.Furniture
         {
             if (player.HasPlate())
             {
-                var plate = player.GetKitchenObject();
-                plate.DestroySelf();
+                var plate = player.GetKitchenObject() as PlateKitchenObject;
+                if (DeliveryManager.Instance.TryDeliveryRecipe(plate))
+                {
+                    // score?
+                }
             }
         }
     }
