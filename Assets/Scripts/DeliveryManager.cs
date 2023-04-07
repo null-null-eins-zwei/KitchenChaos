@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using ZZOT.KitchenChaos.Items;
 using ZZOT.KitchenChaos.ScriptableObjects;
@@ -7,6 +9,9 @@ namespace ZZOT.KitchenChaos
 {
     public class DeliveryManager : MonoBehaviour
     {
+        public event EventHandler OnRecipeSpawned;
+        public event EventHandler OnRecipeCompleted;
+
         public static DeliveryManager Instance {
             get;
             private set;
@@ -41,10 +46,12 @@ namespace ZZOT.KitchenChaos
 
                 var randomRecipe = _allowedRecipes.GetRandom();
                 _waitingRecipeSoList.Add(randomRecipe);
+
+                OnRecipeSpawned?.Invoke(this, EventArgs.Empty);
             }
         }
 
-        public RecipeSO WaitedRecipeOnPlate(PlateKitchenObject plate)
+        public RecipeSO FindWaitedRecipeOnPlate(PlateKitchenObject plate)
         {
             var plateList = plate.GetKitchenObjectSoList();
 
@@ -87,7 +94,7 @@ namespace ZZOT.KitchenChaos
 
         public bool TryDeliveryRecipe(PlateKitchenObject plate)
         {
-            var recipeOnPlate = WaitedRecipeOnPlate(plate);
+            var recipeOnPlate = FindWaitedRecipeOnPlate(plate);
             if (recipeOnPlate == null)
             {
                 return false;
@@ -99,9 +106,11 @@ namespace ZZOT.KitchenChaos
             _waitingRecipeSoList.Remove(recipeOnPlate);
             plate.DestroySelf();
 
-            // Score
+            OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
 
             return true;
         }
+
+        public IList<RecipeSO> WaitingRecipeSoList => _waitingRecipeSoList.AsReadOnlyList();
     }
 }
