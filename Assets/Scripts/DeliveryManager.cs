@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using UnityEngine;
-using ZZOT.KitchenChaos.Character;
 using ZZOT.KitchenChaos.Items;
 using ZZOT.KitchenChaos.ScriptableObjects;
 
@@ -8,11 +7,10 @@ namespace ZZOT.KitchenChaos
 {
     public class DeliveryManager : MonoBehaviour
     {
-        public static DeliveryManager Instance 
-            {
-                get;
-                private set;
-            }
+        public static DeliveryManager Instance {
+            get;
+            private set;
+        }
 
         [SerializeField] private RecipeListSO _allowedRecipes;
 
@@ -30,7 +28,7 @@ namespace ZZOT.KitchenChaos
 
         private void Update()
         {
-            if(_waitingRecipeSoList.Count >= _waitingRecipesCountMax)
+            if (_waitingRecipeSoList.Count >= _waitingRecipesCountMax)
             {
                 _spawnRecipeTimer = _spawnRecipeTimerMax;
                 return;
@@ -90,7 +88,7 @@ namespace ZZOT.KitchenChaos
         public bool TryDeliveryRecipe(PlateKitchenObject plate)
         {
             var recipeOnPlate = WaitedRecipeOnPlate(plate);
-            if(recipeOnPlate == null)
+            if (recipeOnPlate == null)
             {
                 return false;
             }
