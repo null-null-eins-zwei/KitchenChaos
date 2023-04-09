@@ -11,6 +11,8 @@ namespace ZZOT.KitchenChaos
     {
         public event EventHandler OnRecipeSpawned;
         public event EventHandler OnRecipeCompleted;
+        public event EventHandler OnRecipeSuccess;
+        public event EventHandler OnRecipeFailed;
 
         public static DeliveryManager Instance {
             get;
@@ -97,6 +99,7 @@ namespace ZZOT.KitchenChaos
             var recipeOnPlate = FindWaitedRecipeOnPlate(plate);
             if (recipeOnPlate == null)
             {
+                OnRecipeFailed?.Invoke(this, EventArgs.Empty);
                 return false;
             }
 
@@ -107,6 +110,7 @@ namespace ZZOT.KitchenChaos
             plate.DestroySelf();
 
             OnRecipeCompleted?.Invoke(this, EventArgs.Empty);
+            OnRecipeSuccess?.Invoke(this, EventArgs.Empty);
 
             return true;
         }
