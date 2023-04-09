@@ -7,7 +7,15 @@ namespace ZZOT.KitchenChaos
 {
     public class SoundManager : MonoBehaviour
     {
+        public static SoundManager Instance;
+
         [SerializeField] private AudioClipRefsSO _sounds;
+
+
+        private void Awake()
+        {
+            Instance = this;
+        }
 
         private void Start()
         {
@@ -20,6 +28,8 @@ namespace ZZOT.KitchenChaos
             CuttingCounter.OnAnyCut += CuttingCounter_OnAnyCut;
             TrashCounter.OnAnyObjectTrash += Trash_OnAnyObjectThrown;
         }
+
+        public void PlayFootstepSound(Vector3 position) => PlaySound(_sounds.footstep, position);
 
         private void Trash_OnAnyObjectThrown(object sender, System.EventArgs e)
         {
@@ -38,7 +48,6 @@ namespace ZZOT.KitchenChaos
             var player = sender as Player;
             PlaySound(_sounds.objectPickup, player);
         }
-
 
         private void CuttingCounter_OnAnyCut(object sender, System.EventArgs e)
         {
