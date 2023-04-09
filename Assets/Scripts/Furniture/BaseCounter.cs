@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using ZZOT.KitchenChaos.Character;
 using ZZOT.KitchenChaos.Items;
 
@@ -6,6 +8,8 @@ namespace ZZOT.KitchenChaos.Furniture
 {
     public class BaseCounter : MonoBehaviour, IKitchenObjectParent
     {
+        public static event EventHandler OnAnyObjectPlaced;
+
         [SerializeField] protected Transform _counterTopPoint;
 
         private KitchenObject _kitchenObject;
@@ -21,8 +25,6 @@ namespace ZZOT.KitchenChaos.Furniture
             return;
         }
 
-        
-
         public Transform GetKitchenObjectFollowTransform() => _counterTopPoint;
 
         public KitchenObject GetKitchenObject() => _kitchenObject;
@@ -34,6 +36,11 @@ namespace ZZOT.KitchenChaos.Furniture
         public void SetKitchenObject(KitchenObject kitchenObject)
         {
             _kitchenObject = kitchenObject;
+            
+            if(kitchenObject != null) 
+            { 
+                OnAnyObjectPlaced?.Invoke(this, EventArgs.Empty);
+            }
         }
 
     }

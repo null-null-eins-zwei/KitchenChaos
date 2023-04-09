@@ -8,6 +8,7 @@ namespace ZZOT.KitchenChaos.Furniture
 {
     public class CuttingCounter : BaseCounter, IHasProgress
     {
+        public static event EventHandler OnAnyCut;
         public event EventHandler OnCut;
         public event EventHandler<IHasProgress.OnProgressChangedEventArgs> OnProgressChanged;
 
@@ -110,6 +111,7 @@ namespace ZZOT.KitchenChaos.Furniture
                     });
 
                 OnCut?.Invoke(this, EventArgs.Empty);
+                OnAnyCut?.Invoke(this, EventArgs.Empty);
             }
         }
 

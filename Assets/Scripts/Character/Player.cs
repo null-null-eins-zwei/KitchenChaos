@@ -13,7 +13,8 @@ namespace ZZOT.KitchenChaos.Character
 
         private KitchenObject _kitchenObject;
 
-        public event EventHandler<OnSelectedConterChangedEventArgs> OnSelectedConterChanged;
+        public event EventHandler OnPickedUpSomething;
+        public event EventHandler<OnSelectedConterChangedEventArgs> OnSelectedCounterChanged;
 
         public class OnSelectedConterChangedEventArgs : EventArgs
         {
@@ -187,7 +188,7 @@ namespace ZZOT.KitchenChaos.Character
         private void SetSelectedCounter(BaseCounter selected)
         {
             _selectedCounter = selected;
-            OnSelectedConterChanged?.Invoke(
+            OnSelectedCounterChanged?.Invoke(
                 this,
                 new OnSelectedConterChangedEventArgs
                 {
@@ -201,11 +202,19 @@ namespace ZZOT.KitchenChaos.Character
 
         public bool HasKitchenObject() => GetKitchenObject() != null;
 
-        public void ClearKitchenObject() => SetKitchenObject(null);
+        public void ClearKitchenObject()
+        {
+            SetKitchenObject(null);
+        }
 
         public void SetKitchenObject(KitchenObject kitchenObject)
         {
             _kitchenObject = kitchenObject;
+
+            if( _kitchenObject != null )
+            {
+                OnPickedUpSomething?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 }
