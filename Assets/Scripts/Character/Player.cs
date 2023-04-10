@@ -54,6 +54,11 @@ namespace ZZOT.KitchenChaos.Character
 
         private void input_OnInteractAction(object sender, EventArgs e)
         {
+            if (!KitchenGameManager.Instance.IsGamePlaying)
+            {
+                return;
+            }
+
             if (_selectedCounter != null)
             {
                 _selectedCounter.Interact(this);
@@ -62,6 +67,11 @@ namespace ZZOT.KitchenChaos.Character
         
         private void input_OnInteractAlternateAction(object sender, EventArgs e)
         {
+            if (!KitchenGameManager.Instance.IsGamePlaying)
+            {
+                return;
+            }
+
             if (_selectedCounter != null)
             {
                 _selectedCounter.InteractAlternate(this);
