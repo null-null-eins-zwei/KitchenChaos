@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 861dcca74f0b75a4494d1b5f91cd287c, type: 3}
   m_Name: Salad
   m_EditorClassIdentifier: 
-  recipeName: MEGAburger
+  recipeName: Salad
   recipeList:
   - {fileID: 11400000, guid: 27291d76bc467c24799b60cc79171e22, type: 2}
   - {fileID: 11400000, guid: 83493d969d53e4b4ca3be26576719b20, type: 2}

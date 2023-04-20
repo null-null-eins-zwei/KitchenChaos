@@ -1,8 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
-using UnityEditor.Search;
 using UnityEngine;
 
 namespace ZZOT.KitchenChaos
@@ -37,6 +33,6 @@ namespace ZZOT.KitchenChaos
 
         private void Show() => gameObject.SetActive(true);
 
-        private void Hide() => gameObject.SetActive(false);        
+        private void Hide() => gameObject.SetActive(false);
     }
 }
