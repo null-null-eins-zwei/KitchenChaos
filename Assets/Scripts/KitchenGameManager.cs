@@ -1,7 +1,6 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using ZZOT.KitchenChaos.Character;
 using ZZOT.KitchenChaos.Furniture;
 
 namespace ZZOT.KitchenChaos
@@ -24,9 +23,11 @@ namespace ZZOT.KitchenChaos
         private GameState _state;
         [SerializeField] private float _waitingToStartTimer = 1f;
         [SerializeField] private float _countdownToStartTimer = 3f;
-        
+
         [SerializeField] private float _gamePlayingTimerMax = 30f;
         private float _gamePlayingTimer = 0;
+        private bool _isGamePaused = false;
+
 
         private uint _succesfulRecipesAmount;
 
@@ -39,6 +40,18 @@ namespace ZZOT.KitchenChaos
         private void Start()
         {
             DeliveryCounter.Instance.OnRecipeSuccessfulyDelivered += DeliveryCounter_OnRecipeSuccessfulyDelivered;
+            UserInput.Instance.OnPauseAction += UserInput_OnPauseAction;
+        }
+
+        private void UserInput_OnPauseAction(object sender, EventArgs e)
+        {
+            TogglePauseGame();
+        }
+
+        private void TogglePauseGame()
+        {
+            _isGamePaused = !_isGamePaused;
+            Time.timeScale = _isGamePaused ? 0f : 1f;
         }
 
         private void DeliveryCounter_OnRecipeSuccessfulyDelivered(object sender, EventArgs e)
@@ -48,11 +61,11 @@ namespace ZZOT.KitchenChaos
 
         private void Update()
         {
-            switch(_state)
+            switch (_state)
             {
                 case GameState.WaitingToStart:
                     _waitingToStartTimer -= Time.deltaTime;
-                    if(_waitingToStartTimer < 0)
+                    if (_waitingToStartTimer < 0)
                     {
                         _state = GameState.CountdownToStart;
                         _gamePlayingTimer = 0;
@@ -95,7 +108,7 @@ namespace ZZOT.KitchenChaos
         public float GetCountdownToStartTimer() => _countdownToStartTimer;
 
         public float GetPlayingTimerNormalized() =>
-            1-Mathf.Clamp01(_gamePlayingTimer / _gamePlayingTimerMax);
+            1 - Mathf.Clamp01(_gamePlayingTimer / _gamePlayingTimerMax);
 
         public uint GetDeliveredRecipesCount() => _succesfulRecipesAmount;
     }
