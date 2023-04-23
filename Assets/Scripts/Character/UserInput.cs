@@ -26,6 +26,15 @@ namespace ZZOT.KitchenChaos.Character
             _userInputActions.Player.Pause.performed += Pause_performed;
         }
 
+        private void OnDestroy()
+        {
+            _userInputActions.Player.Interact.performed -= Interact_performed;
+            _userInputActions.Player.InteractAlternate.performed -= InteractAlternate_performed;
+            _userInputActions.Player.Pause.performed -= Pause_performed;
+
+            _userInputActions.Dispose();
+        }
+
         private void Pause_performed(CallbackContext context) =>
             OnPauseAction?.Invoke(this, EventArgs.Empty);
         

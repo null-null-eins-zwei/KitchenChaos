@@ -10,6 +10,8 @@ namespace ZZOT.KitchenChaos
         public static KitchenGameManager Instance { get; private set; }
 
         public event EventHandler OnStateChanged;
+        public event EventHandler OnGamePaused;
+        public event EventHandler OnGameUnpaused;
 
         public enum GameState
         {
@@ -43,6 +45,12 @@ namespace ZZOT.KitchenChaos
             UserInput.Instance.OnPauseAction += UserInput_OnPauseAction;
         }
 
+        private void OnDestroy()
+        {
+            DeliveryCounter.Instance.OnRecipeSuccessfulyDelivered -= DeliveryCounter_OnRecipeSuccessfulyDelivered;
+            UserInput.Instance.OnPauseAction -= UserInput_OnPauseAction;
+        }
+
         private void UserInput_OnPauseAction(object sender, EventArgs e)
         {
             TogglePauseGame();
@@ -52,6 +60,15 @@ namespace ZZOT.KitchenChaos
         {
             _isGamePaused = !_isGamePaused;
             Time.timeScale = _isGamePaused ? 0f : 1f;
+
+            if(_isGamePaused)
+            {
+                OnGamePaused?.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                OnGameUnpaused?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private void DeliveryCounter_OnRecipeSuccessfulyDelivered(object sender, EventArgs e)
@@ -111,5 +128,13 @@ namespace ZZOT.KitchenChaos
             1 - Mathf.Clamp01(_gamePlayingTimer / _gamePlayingTimerMax);
 
         public uint GetDeliveredRecipesCount() => _succesfulRecipesAmount;
+
+        public void ResumeGame()
+        {
+            if (_isGamePaused)
+            {
+                TogglePauseGame();
+            }
+        }
     }
 }
