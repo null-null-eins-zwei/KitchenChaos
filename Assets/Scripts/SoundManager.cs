@@ -1,4 +1,3 @@
-using Unity.Mathematics;
 using UnityEngine;
 using ZZOT.KitchenChaos.Character;
 using ZZOT.KitchenChaos.Furniture;
@@ -11,6 +10,7 @@ namespace ZZOT.KitchenChaos
 
         [SerializeField] private AudioClipRefsSO _sounds;
 
+        private float _volume = 1.0f;
 
         private void Awake()
         {
@@ -23,7 +23,7 @@ namespace ZZOT.KitchenChaos
             DeliveryManager.Instance.OnRecipeFailed += Delivery_OnRecipeFailed;
 
             Player.Instance.OnPickedUpSomething += Player_OnPickedUpSomething;
-            
+
             BaseCounter.OnAnyObjectPlaced += AnyCounter_OnAnyObjectPlaced;
             CuttingCounter.OnAnyCut += CuttingCounter_OnAnyCut;
             TrashCounter.OnAnyObjectTrash += Trash_OnAnyObjectThrown;
@@ -61,16 +61,19 @@ namespace ZZOT.KitchenChaos
         private void Delivery_OnRecipeFailed(object sender, System.EventArgs e) =>
             PlaySound(_sounds.deliveryFail, DeliveryCounter.Instance);
 
-        private void PlaySoundOnCamera(AudioClip[] soundLib, float volume = 1f) =>
-            PlaySound(soundLib, Camera.main, volume);
+        private void PlaySoundOnCamera(AudioClip[] soundLib, float volumeMultiplyer = 1f) =>
+            PlaySound(soundLib, Camera.main, volumeMultiplyer);
 
-        private void PlaySound(AudioClip[] soundLib, Component component, float volume = 1f) =>
-            PlaySound(soundLib, component.transform.position, volume);
+        private void PlaySound(AudioClip[] soundLib, Component component, float volumeMultiplyer = 1f) =>
+            PlaySound(soundLib, component.transform.position, volumeMultiplyer);
 
-        private void PlaySound(AudioClip[] soundLib, Vector3 position, float volume = 1f)
+        private void PlaySound(AudioClip[] soundLib, Vector3 position, float volumeMultiplyer = 1f)
         {
             var sound = GetRandomOne(soundLib);
-            AudioSource.PlayClipAtPoint(sound, position, volume);
+            AudioSource.PlayClipAtPoint(
+                sound,
+                position,
+                Mathf.Clamp01(_volume * volumeMultiplyer));
         }
 
         private AudioClip GetRandomOne(AudioClip[] clips)
@@ -78,5 +81,18 @@ namespace ZZOT.KitchenChaos
             var i = UnityEngine.Random.Range(0, clips.Length);
             return clips[i];
         }
+
+        public void ChangeVolume()
+        {
+            _volume += 0.1f;
+            if (_volume > 1.01f)
+            {
+                _volume = 0f;
+            }
+
+            return;
+        }
+
+        public float GetVolume() => _volume;
     }
 }

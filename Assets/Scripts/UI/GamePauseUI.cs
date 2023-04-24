@@ -7,6 +7,7 @@ namespace ZZOT.KitchenChaos
     {
         [SerializeField] Button _resumeButton;
         [SerializeField] Button _mainMenuButton;
+        [SerializeField] Button _optionsButton;
 
         private void Awake()
         {
@@ -18,6 +19,11 @@ namespace ZZOT.KitchenChaos
             _mainMenuButton.onClick.AddListener(() =>
             {
                 Loader.Load(Loader.Scene.MainMenuScene);
+            });
+
+            _optionsButton.onClick.AddListener(() =>
+            {
+                OpionsUI.Instance.Show();
             });
         }
 
