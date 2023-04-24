@@ -6,6 +6,7 @@ namespace ZZOT.KitchenChaos
 {
     public class SoundManager : MonoBehaviour
     {
+        private const string PLAYER_PREFS_SOUND_EFFECTS_VOLUME = "PLAYER_PREFS_SOUND_EFFECTS_VOLUME";
         public static SoundManager Instance;
 
         [SerializeField] private AudioClipRefsSO _sounds;
@@ -15,6 +16,7 @@ namespace ZZOT.KitchenChaos
         private void Awake()
         {
             Instance = this;
+            RestoreVolume();
         }
 
         private void Start()
@@ -90,7 +92,18 @@ namespace ZZOT.KitchenChaos
                 _volume = 0f;
             }
 
-            return;
+            SaveVolume();
+        }
+
+        private void SaveVolume()
+        {
+            PlayerPrefs.SetFloat(PLAYER_PREFS_SOUND_EFFECTS_VOLUME, _volume);
+            PlayerPrefs.Save();
+        }
+
+        private void RestoreVolume()
+        {
+            _volume = PlayerPrefs.GetFloat(PLAYER_PREFS_SOUND_EFFECTS_VOLUME, defaultValue: 1f);
         }
 
         public float GetVolume() => _volume;

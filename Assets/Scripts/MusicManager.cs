@@ -4,6 +4,8 @@ namespace ZZOT.KitchenChaos
 {
     public class MusicManager : MonoBehaviour
     {
+        private const string PLAYER_PREFS_MUSIC_VOLUME = "PLAYER_PREFS_MUSIC_VOLUME";
+
         public static MusicManager Instance;
 
         private AudioSource _audioSource;
@@ -13,7 +15,7 @@ namespace ZZOT.KitchenChaos
         {
             Instance = this;
             _audioSource = GetComponent<AudioSource>();
-            _audioSource.volume = _volume;
+            RestoreVolume();
         }
 
         public void ChangeVolume()
@@ -25,6 +27,19 @@ namespace ZZOT.KitchenChaos
             }
 
             _audioSource.volume = _volume;
+            SaveVolume();
+        }
+
+        private void SaveVolume()
+        {
+            PlayerPrefs.SetFloat(PLAYER_PREFS_MUSIC_VOLUME, _volume);
+            PlayerPrefs.Save();
+        }
+
+        private void RestoreVolume()
+        {
+            _volume = PlayerPrefs.GetFloat(PLAYER_PREFS_MUSIC_VOLUME, defaultValue: 0.3f);
+            _audioSource.volume = Mathf.Clamp01(_volume);
         }
 
         public float GetVolume() => _volume;
