@@ -10,12 +10,44 @@ namespace ZZOT.KitchenChaos
     {
         public static OpionsUI Instance { get; private set; }
 
+        [Header("Volume")]
         [SerializeField] Button _soundEffectsButton;
         [SerializeField] TextMeshProUGUI _soundEffectsText;
 
         [SerializeField] Button _musicButton;
         [SerializeField] TextMeshProUGUI _musicButtonText;
 
+        // Bindings +++
+        [Header("Key Bindings")]
+        [SerializeField] Button _bindMoveUpButton;
+        [SerializeField] TextMeshProUGUI _bindMoveUpText;
+
+        [Space(5)]
+        [SerializeField] Button _bindMoveDownButton;
+        [SerializeField] TextMeshProUGUI _bindMoveDownText;
+
+        [Space(5)]
+        [SerializeField] Button _bindMoveLeftButton;
+        [SerializeField] TextMeshProUGUI _bindMoveLeftText;
+
+        [Space(5)]
+        [SerializeField] Button _bindMoveRightButton;
+        [SerializeField] TextMeshProUGUI _bindMoveRightText;
+
+        [Space(10)]
+        [SerializeField] Button _bindPauseButton;
+        [SerializeField] TextMeshProUGUI _bindPauseText;
+
+        [Space(10)]
+        [SerializeField] Button _bindInteractionButton;
+        [SerializeField] TextMeshProUGUI _bindInteractionText;
+
+        [Space(5)]
+        [SerializeField] Button _bindInteractionAltutton;
+        [SerializeField] TextMeshProUGUI _binInteractionAltText;
+        // Bindings ---
+
+        [Header("Close Option Menu")]
         [SerializeField] Button _closeButton;
 
         private void Awake()
