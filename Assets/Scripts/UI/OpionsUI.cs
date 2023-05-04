@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -44,9 +45,13 @@ namespace ZZOT.KitchenChaos
         [SerializeField] TextMeshProUGUI _bindInteractionText;
 
         [Space(5)]
-        [SerializeField] Button _bindInteractionAltutton;
+        [SerializeField] Button _bindInteractionAltButton;
         [SerializeField] TextMeshProUGUI _binInteractionAltText;
+        
+        [Space(10)]
+        [SerializeField] Transform _rebindSplash;
         // Bindings ---
+
 
         [Header("Close Option Menu")]
         [SerializeField] Button _closeButton;
@@ -68,6 +73,16 @@ namespace ZZOT.KitchenChaos
             });
 
             _closeButton.onClick.AddListener(Hide);
+
+            _bindMoveUpButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.Move_Up));
+            _bindMoveDownButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.Move_Down));
+            _bindMoveLeftButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.Move_Left));
+            _bindMoveRightButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.Move_Right));
+
+            _bindInteractionButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.Interaction));
+            _bindInteractionAltButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.InteractionAlt));
+
+            _bindPauseButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.Pause));
         }
 
         private void Start()
@@ -76,6 +91,7 @@ namespace ZZOT.KitchenChaos
 
             UpdateVisual();
             Hide();
+            HideRebindSplash();
         }
 
         private void OnDestroy()
@@ -86,6 +102,18 @@ namespace ZZOT.KitchenChaos
         private void GameManager_OnGameUnpaused(object sender, System.EventArgs e)
         {
             Hide();
+        }
+
+        private void RebindBinding(UserInput.Binding binding)
+        {
+            ShowRebindSplash();
+            UserInput.Instance.RebindBinding(
+                binding,
+                () => 
+                {
+                    HideRebindSplash();
+                    UpdateVisual();
+                });
         }
 
         private void UpdateVisual()
@@ -104,14 +132,12 @@ namespace ZZOT.KitchenChaos
             _bindPauseText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Pause);
         }
 
-        public void Show()
-        {
-            gameObject.SetActive(true);
-        }
+        private void ShowRebindSplash() => _rebindSplash.gameObject.SetActive(true);
 
-        public void Hide() 
-        {
-            gameObject.SetActive(false);
-        }
+        private void HideRebindSplash() => _rebindSplash.gameObject.SetActive(false);
+
+        public void Show() =>gameObject.SetActive(true);
+
+        public void Hide() =>  gameObject.SetActive(false);
     }
 }

@@ -1,11 +1,15 @@
 using System;
+using System.Runtime.CompilerServices;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static UnityEngine.InputSystem.InputAction;
 
 namespace ZZOT.KitchenChaos.Character
 {
     public class UserInput : MonoBehaviour
     {
+        private const string PLAYER_PREFS_BINDINGS = "InputBindings";
+
         public static UserInput Instance { get; private set; }
 
         public event EventHandler OnInteractAction;
@@ -32,11 +36,14 @@ namespace ZZOT.KitchenChaos.Character
             Instance = this;
 
             _userInputActions = new UserInputActions();
+            LoadRebind(); // need to load before enable
+
             _userInputActions.Player.Enable();
 
             _userInputActions.Player.Interact.performed += Interact_performed;
             _userInputActions.Player.InteractAlternate.performed += InteractAlternate_performed;
             _userInputActions.Player.Pause.performed += Pause_performed;
+
         }
 
         private void OnDestroy()
@@ -80,5 +87,64 @@ namespace ZZOT.KitchenChaos.Character
                     
                     _ => "UNKNOWN_BINGIND"!,
                 };
+
+        public void RebindBinding(Binding binding, Action onRebound)
+        {
+            _userInputActions.Player.Disable();
+
+            var actionToRebind = binding switch
+            {
+                Binding.Move_Up => _userInputActions.Player.Move.PerformInteractiveRebinding(1),
+                Binding.Move_Down => _userInputActions.Player.Move.PerformInteractiveRebinding(2),
+                Binding.Move_Left => _userInputActions.Player.Move.PerformInteractiveRebinding(3),
+                Binding.Move_Right => _userInputActions.Player.Move.PerformInteractiveRebinding(4),
+
+                Binding.Interaction => _userInputActions.Player.Interact.PerformInteractiveRebinding(0),
+                Binding.InteractionAlt => _userInputActions.Player.InteractAlternate.PerformInteractiveRebinding(0),
+
+                Binding.Pause => _userInputActions.Player.Pause.PerformInteractiveRebinding(0),
+                _ => null,
+            };
+
+            if(actionToRebind == null)
+            {
+                _userInputActions.Player.Enable();
+                return;
+            }
+
+            actionToRebind
+                ?.OnComplete(rebind =>
+                {
+                    // x.action.bindings[1].path - old binding
+                    // x.action.bindings[1].overridePath - new bindings
+                    rebind.Dispose();
+                    _userInputActions.Player.Enable();
+
+                    SaveRebind();
+
+                    onRebound?.Invoke();
+                })
+                ?.Start();
+
+            _userInputActions.Player.Enable();
+        }
+
+        private void SaveRebind()
+        {
+            var rebindJson = _userInputActions.SaveBindingOverridesAsJson();
+            PlayerPrefs.SetString(PLAYER_PREFS_BINDINGS, rebindJson);
+            PlayerPrefs.Save();
+        }
+
+        private void LoadRebind()
+        {
+            if(!PlayerPrefs.HasKey(PLAYER_PREFS_BINDINGS)) 
+            {
+                return;
+            }
+
+            var rebindJson = PlayerPrefs.GetString(PLAYER_PREFS_BINDINGS);
+            _userInputActions.LoadBindingOverridesFromJson(rebindJson);
+        }
     }
 }
