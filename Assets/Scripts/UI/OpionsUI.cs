@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using ZZOT.KitchenChaos.Character;
 
 namespace ZZOT.KitchenChaos
 {
@@ -91,6 +92,16 @@ namespace ZZOT.KitchenChaos
         {
             _soundEffectsText.text = $"Sound Effects: {Mathf.Round(SoundManager.Instance.GetVolume() * 100f)}";
             _musicButtonText.text = $"Music: {Mathf.Round(MusicManager.Instance.GetVolume() * 100f)}";
+
+            _bindMoveUpText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Move_Up);
+            _bindMoveDownText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Move_Down);
+            _bindMoveLeftText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Move_Left);
+            _bindMoveRightText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Move_Right);
+
+            _bindInteractionText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Interaction);
+            _binInteractionAltText.text = UserInput.Instance.GetBindingText(UserInput.Binding.InteractionAlt);
+
+            _bindPauseText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Pause);
         }
 
         public void Show()
