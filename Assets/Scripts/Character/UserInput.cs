@@ -29,6 +29,10 @@ namespace ZZOT.KitchenChaos.Character
             Pause = 20,
             Interaction = 30,
             InteractionAlt = 32,
+
+            Gamepad_Pause = 40,
+            Gamepad_Interaction = 50,
+            Gamepad_InteractionAlt = 52,
         }
 
         private void Awake()
@@ -84,7 +88,11 @@ namespace ZZOT.KitchenChaos.Character
                     Binding.InteractionAlt => _userInputActions.Player.InteractAlternate.bindings[0].ToDisplayString(),
                     
                     Binding.Pause => _userInputActions.Player.Pause.bindings[0].ToDisplayString(),
-                    
+
+                    Binding.Gamepad_Pause => _userInputActions.Player.Pause.bindings[1].ToDisplayString(),
+                    Binding.Gamepad_Interaction => _userInputActions.Player.Interact.bindings[1].ToDisplayString(),
+                    Binding.Gamepad_InteractionAlt => _userInputActions.Player.InteractAlternate.bindings[1].ToDisplayString(),
+
                     _ => "UNKNOWN_BINGIND"!,
                 };
 
@@ -103,6 +111,12 @@ namespace ZZOT.KitchenChaos.Character
                 Binding.InteractionAlt => _userInputActions.Player.InteractAlternate.PerformInteractiveRebinding(0),
 
                 Binding.Pause => _userInputActions.Player.Pause.PerformInteractiveRebinding(0),
+
+                Binding.Gamepad_Pause => _userInputActions.Player.Pause.PerformInteractiveRebinding(1),
+
+                Binding.Gamepad_Interaction => _userInputActions.Player.Interact.PerformInteractiveRebinding(1),
+                Binding.Gamepad_InteractionAlt => _userInputActions.Player.InteractAlternate.PerformInteractiveRebinding(1),
+
                 _ => null,
             };
 

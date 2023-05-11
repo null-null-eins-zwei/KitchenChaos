@@ -46,8 +46,20 @@ namespace ZZOT.KitchenChaos
 
         [Space(5)]
         [SerializeField] Button _bindInteractionAltButton;
-        [SerializeField] TextMeshProUGUI _binInteractionAltText;
-        
+        [SerializeField] TextMeshProUGUI _bindInteractionAltText;
+
+        [Header("Key Bindings Gamepad")]
+        [SerializeField] Button _bindGamepadPauseButton;
+        [SerializeField] TextMeshProUGUI _bindGamepadPauseText;
+
+        [Space(5)]
+        [SerializeField] Button _bindGamepadInteractionButton;
+        [SerializeField] TextMeshProUGUI _bindGamepadInteractionText;
+
+        [Space(5)]
+        [SerializeField] Button _bindGamepadInteractionAltButton;
+        [SerializeField] TextMeshProUGUI _bindGamepadInteractionAltText;
+
         [Space(10)]
         [SerializeField] Transform _rebindSplash;
         // Bindings ---
@@ -83,6 +95,10 @@ namespace ZZOT.KitchenChaos
             _bindInteractionAltButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.InteractionAlt));
 
             _bindPauseButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.Pause));
+
+            _bindGamepadPauseButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.Gamepad_Pause));
+            _bindGamepadInteractionButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.Gamepad_Interaction));
+            _bindGamepadInteractionAltButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.Gamepad_InteractionAlt));
         }
 
         private void Start()
@@ -127,9 +143,13 @@ namespace ZZOT.KitchenChaos
             _bindMoveRightText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Move_Right);
 
             _bindInteractionText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Interaction);
-            _binInteractionAltText.text = UserInput.Instance.GetBindingText(UserInput.Binding.InteractionAlt);
+            _bindInteractionAltText.text = UserInput.Instance.GetBindingText(UserInput.Binding.InteractionAlt);
 
             _bindPauseText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Pause);
+
+            _bindGamepadPauseText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Gamepad_Pause);
+            _bindGamepadInteractionText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Gamepad_Interaction);
+            _bindGamepadInteractionAltText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Gamepad_InteractionAlt);
         }
 
         private void ShowRebindSplash() => _rebindSplash.gameObject.SetActive(true);

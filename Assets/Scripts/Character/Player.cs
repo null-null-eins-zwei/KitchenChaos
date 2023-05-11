@@ -107,8 +107,9 @@ namespace ZZOT.KitchenChaos.Character
                 Vector3 moveDirX = new Vector3(moveDir.x, 0f, 0f).normalized;
                 Vector3 moveDirZ = new Vector3(0f, 0f, moveDir.z).normalized;
 
-                var canMoveX = (moveDirX != Vector3.zero) && CanMove(moveDirX, moveDistance);
-                var canMoveZ = (moveDirZ != Vector3.zero) && CanMove(moveDirZ, moveDistance);
+                // Math.Abs(moveDirX.x) > 0.3 - because of analog controller
+                var canMoveX = (Math.Abs(moveDirX.x) > 0.3) && CanMove(moveDirX, moveDistance);
+                var canMoveZ = (Math.Abs(moveDirZ.z) > 0.3) && CanMove(moveDirZ, moveDistance);
 
                 if (canMoveX)
                 {
