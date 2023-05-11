@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -64,9 +65,10 @@ namespace ZZOT.KitchenChaos
         [SerializeField] Transform _rebindSplash;
         // Bindings ---
 
-
         [Header("Close Option Menu")]
         [SerializeField] Button _closeButton;
+
+        private Action _onCloseButtonAction;
 
         private void Awake()
         {
@@ -84,7 +86,11 @@ namespace ZZOT.KitchenChaos
                 UpdateVisual();
             });
 
-            _closeButton.onClick.AddListener(Hide);
+            _closeButton.onClick.AddListener(() =>
+            {
+                Hide();
+                _onCloseButtonAction?.Invoke();
+            });
 
             _bindMoveUpButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.Move_Up));
             _bindMoveDownButton.onClick.AddListener(() => RebindBinding(UserInput.Binding.Move_Down));
@@ -156,7 +162,13 @@ namespace ZZOT.KitchenChaos
 
         private void HideRebindSplash() => _rebindSplash.gameObject.SetActive(false);
 
-        public void Show() =>gameObject.SetActive(true);
+        public void Show(Action onCloseButtonAction)
+        {
+            gameObject.SetActive(true);
+            _closeButton.Select(); // need to select because of gamepad/cursors
+
+            _onCloseButtonAction = onCloseButtonAction;
+        }
 
         public void Hide() =>  gameObject.SetActive(false);
     }

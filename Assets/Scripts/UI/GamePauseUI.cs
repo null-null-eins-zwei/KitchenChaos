@@ -23,7 +23,8 @@ namespace ZZOT.KitchenChaos
 
             _optionsButton.onClick.AddListener(() =>
             {
-                OpionsUI.Instance.Show();
+                OpionsUI.Instance.Show(this.Show);
+                Hide(); // to not confuse buttons navigation
             });
         }
 
@@ -48,6 +49,7 @@ namespace ZZOT.KitchenChaos
         private void Show()
         {
             gameObject.SetActive(true);
+            _resumeButton.Select(); // need to select because of gamepad/cursors
         }
 
         private void Hide()
