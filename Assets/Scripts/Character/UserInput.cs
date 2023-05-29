@@ -16,6 +16,8 @@ namespace ZZOT.KitchenChaos.Character
         public event EventHandler OnInteractAlternateAction;
         public event EventHandler OnPauseAction;
 
+        public event EventHandler OnBindingRebind;
+
         UserInputActions _userInputActions;
 
         public enum Binding
@@ -128,16 +130,18 @@ namespace ZZOT.KitchenChaos.Character
 
             actionToRebind
                 ?.OnComplete(rebind =>
-                {
-                    // x.action.bindings[1].path - old binding
-                    // x.action.bindings[1].overridePath - new bindings
-                    rebind.Dispose();
-                    _userInputActions.Player.Enable();
+                    {
+                        // x.action.bindings[1].path - old binding
+                        // x.action.bindings[1].overridePath - new bindings
+                        rebind.Dispose();
 
-                    SaveRebind();
+                        SaveRebind();
 
-                    onRebound?.Invoke();
-                })
+                        onRebound?.Invoke();
+                        OnBindingRebind?.Invoke(this, EventArgs.Empty);
+                        
+                        _userInputActions.Player.Enable();
+                    })
                 ?.Start();
 
             _userInputActions.Player.Enable();

@@ -149,13 +149,13 @@ namespace ZZOT.KitchenChaos
             _bindMoveRightText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Move_Right);
 
             _bindInteractionText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Interaction);
+            _bindGamepadInteractionText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Gamepad_Interaction);
+
             _bindInteractionAltText.text = UserInput.Instance.GetBindingText(UserInput.Binding.InteractionAlt);
+            _bindGamepadInteractionAltText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Gamepad_InteractionAlt);
 
             _bindPauseText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Pause);
-
             _bindGamepadPauseText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Gamepad_Pause);
-            _bindGamepadInteractionText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Gamepad_Interaction);
-            _bindGamepadInteractionAltText.text = UserInput.Instance.GetBindingText(UserInput.Binding.Gamepad_InteractionAlt);
         }
 
         private void ShowRebindSplash() => _rebindSplash.gameObject.SetActive(true);

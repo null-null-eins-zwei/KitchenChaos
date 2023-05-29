@@ -23,7 +23,6 @@ namespace ZZOT.KitchenChaos
         }
 
         private GameState _state;
-        [SerializeField] private float _waitingToStartTimer = 1f;
         [SerializeField] private float _countdownToStartTimer = 3f;
 
         [SerializeField] private float _gamePlayingTimerMax = 30f;
@@ -43,6 +42,19 @@ namespace ZZOT.KitchenChaos
         {
             DeliveryCounter.Instance.OnRecipeSuccessfulyDelivered += DeliveryCounter_OnRecipeSuccessfulyDelivered;
             UserInput.Instance.OnPauseAction += UserInput_OnPauseAction;
+            UserInput.Instance.OnInteractAction += UserInput_OnInteractAction;
+        }
+
+        private void UserInput_OnInteractAction(object sender, EventArgs e)
+        {
+            if(_state == GameState.WaitingToStart)
+            {
+                _gamePlayingTimer = 0;
+                _succesfulRecipesAmount = 0;
+
+                _state = GameState.CountdownToStart;
+                OnStateChanged?.Invoke(this, EventArgs.Empty);
+            }
         }
 
         private void OnDestroy()
@@ -81,14 +93,7 @@ namespace ZZOT.KitchenChaos
             switch (_state)
             {
                 case GameState.WaitingToStart:
-                    _waitingToStartTimer -= Time.deltaTime;
-                    if (_waitingToStartTimer < 0)
-                    {
-                        _state = GameState.CountdownToStart;
-                        _gamePlayingTimer = 0;
-                        _succesfulRecipesAmount = 0;
-                        OnStateChanged?.Invoke(this, EventArgs.Empty);
-                    }
+                    // UserInput_OnInteractAction()
                     break;
                 case GameState.CountdownToStart:
                     _countdownToStartTimer -= Time.deltaTime;

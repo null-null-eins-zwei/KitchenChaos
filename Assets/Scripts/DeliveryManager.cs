@@ -41,8 +41,13 @@ namespace ZZOT.KitchenChaos
                 return;
             }
 
-            _spawnRecipeTimer -= Time.deltaTime;
-            if (_spawnRecipeTimer <= 0f)
+            if (_spawnRecipeTimer > -1f)
+            { 
+                _spawnRecipeTimer -= Time.deltaTime;
+            }
+        
+            if (_spawnRecipeTimer <= 0f
+                && KitchenGameManager.Instance.IsGamePlaying)
             {
                 _spawnRecipeTimer = _spawnRecipeTimerMax;
 
