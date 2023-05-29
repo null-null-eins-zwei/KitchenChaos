@@ -5,7 +5,16 @@ namespace ZZOT.KitchenChaos
 {
     public class GameStartCountdownUI : MonoBehaviour
     {
-        [SerializeField] TextMeshProUGUI _countdownTMP;
+        private const string TRIGGER_ANIMATION_POPUP = "NumberPopup";
+        [SerializeField] private TextMeshProUGUI _countdownTMP;
+
+        private Animator _animator;
+        private int _lastCeilCount = 0;
+
+        private void Awake()
+        {
+            _animator = GetComponent<Animator>();
+        }
 
         private void Start()
         {
@@ -29,6 +38,14 @@ namespace ZZOT.KitchenChaos
         {
             var count = KitchenGameManager.Instance.GetCountdownToStartTimer();
             _countdownTMP.text = count.ToString("F2");
+
+            var ceilCount = Mathf.CeilToInt(count);
+            if (ceilCount != _lastCeilCount)
+            {
+                _lastCeilCount = ceilCount;
+                _animator.SetTrigger(TRIGGER_ANIMATION_POPUP);
+                SoundManager.Instance.PlayCountdownSound();
+            }
         }
 
         private void Show() => gameObject.SetActive(true);
