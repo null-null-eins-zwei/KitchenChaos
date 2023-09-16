@@ -33,6 +33,8 @@ namespace ZZOT.KitchenChaos
 
         public void PlayFootstepSound(Vector3 position) => PlaySound(_sounds.footstep, position);
 
+        public void PlayCountdownSound() => PlaySoundOnCamera(_sounds.warning);
+
         private void Trash_OnAnyObjectThrown(object sender, System.EventArgs e)
         {
             var counter = sender as TrashCounter;
