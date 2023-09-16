@@ -25,7 +25,7 @@ namespace ZZOT.KitchenChaos
         private GameState _state;
         [SerializeField] private float _countdownToStartTimer = 3f;
 
-        [SerializeField] private float _gamePlayingTimerMax = 30f;
+        [SerializeField] private float _gamePlayingTimerMax = 5 * 60f;
         private float _gamePlayingTimer = 0;
         private bool _isGamePaused = false;
 
